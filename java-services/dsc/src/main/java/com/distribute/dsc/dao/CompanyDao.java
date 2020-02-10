@@ -6,6 +6,9 @@ import org.springframework.data.mongodb.repository.Query;
 
 public interface CompanyDao extends MongoRepository<RegisterCompany,Long> {
 
-    @Query(value = "{ 'user.email' : ?0 }")
+    @Query(value = "{ 'user.email' : ?0 }",fields = "{ 'company': 0}")
     RegisterCompany findByUserEmail(String email);
+
+    @Query(value = "{ 'user.email' : ?0 }")
+    RegisterCompany findByUserLoginEmail(String email);
 }

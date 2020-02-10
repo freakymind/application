@@ -34,7 +34,7 @@ public class CompanyController {
     Logger logger = Logger.getLogger(this.getClass());
 
 @RequestMapping(value="/registerCompany",method = RequestMethod.POST)
-    public ResponseEntity<Object> registerCompany(@RequestBody RegisterCompanyHandler requestBody, HttpServletRequest httpRequest, HttpServletResponse httpResponse){
+    public ResponseEntity<Object> registerCompany(@RequestBody RegisterCompanyHandler requestBody, HttpServletRequest httpRequest, HttpServletResponse httpResponse) throws Exception {
     if(requestBody == null || requestBody.getCompany_name()=="" ||requestBody.getCompany_address() == "" ||requestBody.getCompany_email() == "" ||requestBody.getCompany_name() == "" ||requestBody.getAddress() == "" ||requestBody.getCountry() == "" ||requestBody.getEmail() == "" ||requestBody.getFullname() == "" ||requestBody.getMobile() == ""  ){
         logger.error("The Request Body is Empty");
         errorResponse.setMessage(REQUESTEMPTY);

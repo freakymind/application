@@ -5,5 +5,5 @@ import com.distribute.dsc.model.UserResponse;
 
 
 public interface CompanyService {
-    UserResponse registerCompany(RegisterCompanyHandler requestBody);
+    UserResponse registerCompany(RegisterCompanyHandler requestBody) throws Exception;
 }

@@ -9,7 +9,16 @@ import com.distribute.dsc.service.CompanyService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import javax.crypto.Cipher;
+import javax.crypto.KeyGenerator;
+import javax.crypto.SecretKey;
+import javax.crypto.SecretKeyFactory;
+import javax.crypto.spec.IvParameterSpec;
+import javax.crypto.spec.PBEKeySpec;
+import javax.crypto.spec.SecretKeySpec;
 import java.security.SecureRandom;
+import java.security.spec.KeySpec;
+import java.util.Base64;
 import java.util.Random;
 
 @Service
@@ -19,6 +28,9 @@ public class CompanyServiceImpl implements CompanyService {
     public static  String REGISTERSUCCESS = "Company Registration Success.Please wait for the confirmation mail.";
     public static  String USEREXISTS ="User Already Exists with the email";
     static final String AB = "0123456789ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz";
+    static final String secretKey = "h@rryPotter";
+    static final String salt = "h@rryPotter";
+    static Cipher cipher;
     static SecureRandom rnd = new SecureRandom();
 
 
@@ -28,28 +40,35 @@ public class CompanyServiceImpl implements CompanyService {
 
 
     @Override
-    public UserResponse registerCompany(RegisterCompanyHandler requestBody) {
+    public UserResponse registerCompany(RegisterCompanyHandler requestBody) throws Exception {
         UserResponse response = new UserResponse();
         RegisterCompany mappedDetails = CompanyMapper.mapAllCompanyDetails(requestBody);
         RegisterCompany details = database.findByUserEmail(requestBody.getEmail());
-
-
-//        {
-//            "fullname": "uppu yashwanth",
-//                "email": "yashwanth.uppu@ojas-it.com",
-//                "mobile": "8333965045",
-//                "address": "Hyderabad",
-//                "country": "India",
-//                "role": null,
-//                "password": "Ojas1525",
-//                "companyRef": null,
-//                "isActive": null
-//        }
-
+        System.out.println(details);
         if(details == null){
+            String plainText = null;
             if(requestBody.getPassword()=="" || requestBody.getPassword() == null){
-                mappedDetails.getUser().get(0).setPassword("Ojas1525");
+            String generatedPassword = generatecompanyReference();
+                plainText = generatedPassword;
+
             }
+            else{
+
+                plainText = requestBody.getPassword();
+
+            }
+
+//            KeyGenerator keyGenerator = KeyGenerator.getInstance("AES");
+//            keyGenerator.init(128);
+//            SecretKey secretKey = keyGenerator.generateKey();
+//
+//            cipher = Cipher.getInstance("AES");
+
+            String encryptedPassword = encrypt(plainText,secretKey);
+            mappedDetails.getUser().get(0).setPassword(encryptedPassword);
+
+
+
             String generatedCompanyRef = generatecompanyReference();
             mappedDetails.getUser().get(0).setCompanyRef(generatedCompanyRef);
             mappedDetails.getUser().get(0).setRole("COMPANY_ADMIN");
@@ -62,6 +81,7 @@ public class CompanyServiceImpl implements CompanyService {
             response.setMessage(REGISTERSUCCESS);
             response.setStatus(SUCCESS);
             return response;
+
 
         }
         else{
@@ -78,4 +98,58 @@ public class CompanyServiceImpl implements CompanyService {
         String s = Long.toString (r.nextLong () & Long.MAX_VALUE, 24);
         return s;
     }
+
+
+
+//    public String encryptPassword(String plainText) throws Exception {
+//        KeyGenerator keyGenerator = KeyGenerator.getInstance("AES");
+//
+//        keyGenerator.init(128);
+//        SecretKey secretKey = keyGenerator.generateKey();
+//        cipher = Cipher.getInstance("AES");
+//        String encryptedText = encrypt(plainText, secretKey);
+//        return encryptedText;
+//    }
+
+
+//    public static String encrypt(String plainText, SecretKey secretKey)
+//            throws Exception {
+//        byte[] plainTextByte = plainText.getBytes();
+//        cipher.init(Cipher.ENCRYPT_MODE, secretKey);
+//        byte[] encryptedByte = cipher.doFinal(plainTextByte);
+//        Base64.Encoder encoder = Base64.getEncoder();
+//        String encryptedText = encoder.encodeToString(encryptedByte);
+//        return encryptedText;
+//    }
+
+
+    public static String encrypt(String strToEncrypt, String secret)
+    {
+        try
+        {
+            byte[] iv = { 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0 };
+            IvParameterSpec ivspec = new IvParameterSpec(iv);
+
+            SecretKeyFactory factory = SecretKeyFactory.getInstance("PBKDF2WithHmacSHA256");
+            KeySpec spec = new PBEKeySpec(secretKey.toCharArray(), salt.getBytes(), 65536, 256);
+            SecretKey tmp = factory.generateSecret(spec);
+            SecretKeySpec secretKey = new SecretKeySpec(tmp.getEncoded(), "AES");
+
+            Cipher cipher = Cipher.getInstance("AES/CBC/PKCS5Padding");
+            cipher.init(Cipher.ENCRYPT_MODE, secretKey, ivspec);
+            return Base64.getEncoder().encodeToString(cipher.doFinal(strToEncrypt.getBytes("UTF-8")));
+        }
+        catch (Exception e)
+        {
+            System.out.println("Error while encrypting: " + e.toString());
+        }
+        return null;
+    }
+
+
+
+
+
+
+
 }
