@@ -3,6 +3,8 @@ package com.dsc.controller;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -28,6 +30,8 @@ public class RegisterCompanyController {
 
 	@Autowired
 	AuthenticationManager authenticationManager;
+	
+	private final Logger logger = LogManager.getLogger(this.getClass());
 
 	public static Integer FAIL = 1;
 	public static String REQUESTEMPTY = "Please Enter All the required Details";
@@ -37,13 +41,15 @@ public class RegisterCompanyController {
 	@PostMapping("/registercompany")
 	public ResponseEntity<Object> registerCompany(@RequestBody RegisterCompanyHandler requestBody,
 			HttpServletRequest request, HttpServletResponse response) {
+		logger.debug("Incoming request : " + requestBody);
 
 		try {
 
 			if (requestBody == null) {
-				ErrorResponse error = new ErrorResponse();
-				error.setMessage("Invalid Request");
-				return new ResponseEntity<>(error, HttpStatus.UNPROCESSABLE_ENTITY);
+				logger.error("Invalid request");
+				errorResponse.setStatus(FAIL);
+				errorResponse.setMessage("Invalid Request");
+				return new ResponseEntity<>(errorResponse, HttpStatus.UNPROCESSABLE_ENTITY);
 			}
 
 			if ((requestBody.getCompany_name().isEmpty() || requestBody.getCompany_name() == null)
@@ -55,6 +61,7 @@ public class RegisterCompanyController {
 					|| (requestBody.getFullname().isEmpty() || requestBody.getFullname() == null)
 					|| (requestBody.getMobile().isEmpty() || requestBody.getMobile() == null)
 					|| (requestBody.getCountry().isEmpty() || requestBody.getCountry() == null)) {
+				logger.error("Data must not be null");
 				errorResponse.setMessage(REQUESTEMPTY);
 				errorResponse.setStatus(FAIL);
 				errorResponse.setData(null);
@@ -64,9 +71,10 @@ public class RegisterCompanyController {
 			return new ResponseEntity<>(userResponse, HttpStatus.OK);
 
 		} catch (Exception e) {
-			ErrorResponse error = new ErrorResponse();
-			error.setMessage("Exception caught Register Compnay controller!");
-			return new ResponseEntity<>(error, HttpStatus.CONFLICT);
+			logger.error("Exception caught : " + e.getMessage());
+			errorResponse.setStatus(FAIL);
+			errorResponse.setMessage("Exception caught Register Compnay controller!");
+			return new ResponseEntity<>(errorResponse, HttpStatus.CONFLICT);
 
 		}
 	}

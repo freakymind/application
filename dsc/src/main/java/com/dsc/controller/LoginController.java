@@ -3,6 +3,8 @@ package com.dsc.controller;
 import java.util.HashMap;
 import java.util.Map;
 
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -35,16 +37,32 @@ public class LoginController {
 	@Autowired
 	private RegisterCompnayDao regDao;
 
+	public static Integer FAIL = 1;
+	public static String REQUESTEMPTY = "Please Enter All the required Details";
+
+	private final Logger logger = LogManager.getLogger(this.getClass());
+	ErrorResponse errorResponse = new ErrorResponse();
+
 	@PostMapping("/login")
 	public ResponseEntity<Object> userLogin(@RequestBody LoginHandler login) {
+		logger.debug("Incoming request : " + login);
 
 		try {
 
-			if (login == null || (login.getEmail().isEmpty() || login.getEmail() == null)
+			if (login == null) {
+				logger.error("Invalid request");
+				errorResponse.setStatus(FAIL);
+				errorResponse.setMessage("Invalid Request");
+				return new ResponseEntity<>(errorResponse, HttpStatus.UNPROCESSABLE_ENTITY);
+			}
+
+			if ((login.getEmail().isEmpty() || login.getEmail() == null)
 					|| (login.getPassword().isEmpty() || login.getPassword() == null)) {
-				ErrorResponse error = new ErrorResponse();
-				error.setMessage("Invalid Request");
-				return new ResponseEntity<>(error, HttpStatus.UNPROCESSABLE_ENTITY);
+				logger.error("Data must not be null");
+				errorResponse.setMessage(REQUESTEMPTY);
+				errorResponse.setStatus(FAIL);
+				errorResponse.setData(null);
+				return new ResponseEntity<>(errorResponse, HttpStatus.UNPROCESSABLE_ENTITY);
 			}
 			String email = login.getEmail();
 			authenticationManager.authenticate(new UsernamePasswordAuthenticationToken(email, login.getPassword()));
@@ -55,6 +73,9 @@ public class LoginController {
 			model.put("Token", "Bearer " + token);
 			return new ResponseEntity<>(model, HttpStatus.OK);
 		} catch (AuthenticationException e) {
+			logger.error("Invalid email/password");
+			errorResponse.setStatus(FAIL);
+			errorResponse.setData(null);
 			throw new BadCredentialsException("Invalid email/password !");
 		}
 

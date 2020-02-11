@@ -5,6 +5,8 @@ import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
 
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
@@ -22,10 +24,12 @@ public class CustomUserDetailsService implements UserDetailsService {
 
 	@Autowired
 	private RegisterCompnayDao regDao;
+	
+	private final Logger logger = LogManager.getLogger(this.getClass());
 
 	@Override
 	public UserDetails loadUserByUsername(String email) throws UsernameNotFoundException {
-
+		logger.debug("Incoming request user email: " + email);
 		RegisterCompany userDetails = regDao.findByUserEmail(email);
 
 		if (userDetails != null) {
@@ -34,7 +38,8 @@ public class CustomUserDetailsService implements UserDetailsService {
 			return getUserForDetails(userDetails, authorities);
 
 		} else {
-			throw new UsernameNotFoundException("user mail not found.");
+			logger.error("Failed to process request");
+			throw new UsernameNotFoundException("user mail not found");
 		}
 	}
 

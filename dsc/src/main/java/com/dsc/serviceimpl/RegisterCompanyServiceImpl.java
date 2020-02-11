@@ -3,6 +3,8 @@ package com.dsc.serviceimpl;
 import java.security.SecureRandom;
 import java.util.Random;
 
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.core.env.Environment;
 import org.springframework.mail.MailAuthenticationException;
@@ -23,6 +25,7 @@ import com.dsc.service.RegisterCompanyService;
 public class RegisterCompanyServiceImpl implements RegisterCompanyService {
 
 	public static Integer SUCCESS = 0;
+	public static Integer FAIL = 1;
 	public static String REGISTERSUCCESS = "Company Registration Success.Please wait for the confirmation mail.";
 	public static String USEREXISTS = "User Already Exists with the email";
 	static final String AB = "0123456789ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz";
@@ -41,9 +44,11 @@ public class RegisterCompanyServiceImpl implements RegisterCompanyService {
 	private BCryptPasswordEncoder passwordEncoder;
 
 	UserResponse response = new UserResponse();
+	private final Logger logger = LogManager.getLogger(this.getClass());
 
 	@Override
 	public UserResponse registerCompany(RegisterCompanyHandler requestBody) throws Exception {
+		logger.debug("Incoming request : " + requestBody);
 
 		RegisterCompany mappedDetails = CompanyMapper.mapAllCompanyDetails(requestBody);
 		RegisterCompany details = null;
@@ -63,14 +68,15 @@ public class RegisterCompanyServiceImpl implements RegisterCompanyService {
 			regCompdao.save(mappedDetails);
 			String email = requestBody.getEmail();
 			sendEmail(email);
-
+			logger.info("Company registration successfully!");
 			response.setData(mappedDetails);
 			response.setMessage(REGISTERSUCCESS);
 			response.setStatus(SUCCESS);
 			return response;
 
 		}
-		response.setStatus(SUCCESS);
+		logger.error("Failed to process request");
+		response.setStatus(FAIL);
 		response.setMessage(USEREXISTS);
 		return response;
 	}
@@ -84,20 +90,21 @@ public class RegisterCompanyServiceImpl implements RegisterCompanyService {
 
 	public Boolean sendEmail(String email) throws MailException {
 		Boolean sent = false;
-
+		logger.debug("user email : " + email);
 		try {
 			if (email != null) {
-
 				SimpleMailMessage mailMessage = new SimpleMailMessage();
 				mailMessage.setFrom(env.getProperty("spring.mail.username"));
 				mailMessage.setTo(email);
-				mailMessage.setSubject("Hi Registration Success");
+				mailMessage.setSubject("Hi your Registration successfully!");
 				mailMessage.setText("Welcome to Ojas");
 				javaMailSender.send(mailMessage);
+				logger.info("Email sent successfully!");
 				sent = true;
 			}
 			return sent;
 		} catch (MailException e) {
+			logger.error("Failed to email sent");
 			e.printStackTrace();
 			throw new MailAuthenticationException("Invalid Credentials !");
 		}
