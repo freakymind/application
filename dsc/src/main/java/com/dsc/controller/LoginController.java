@@ -1,10 +1,13 @@
 package com.dsc.controller;
 
+import static com.dsc.constants.CompanyConstants.FAIL;
+import static com.dsc.constants.CompanyConstants.REQUEST_EMPTY;
+
 import java.util.HashMap;
 import java.util.Map;
 
-import org.apache.logging.log4j.LogManager;
-import org.apache.logging.log4j.Logger;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -37,10 +40,8 @@ public class LoginController {
 	@Autowired
 	private RegisterCompnayDao regDao;
 
-	public static Integer FAIL = 1;
-	public static String REQUESTEMPTY = "Please Enter All the required Details";
 
-	private final Logger logger = LogManager.getLogger(this.getClass());
+	private static final Logger logger =  LoggerFactory.getLogger(LoginController.class);
 	ErrorResponse errorResponse = new ErrorResponse();
 
 	@PostMapping("/login")
@@ -59,7 +60,7 @@ public class LoginController {
 			if ((login.getEmail().isEmpty() || login.getEmail() == null)
 					|| (login.getPassword().isEmpty() || login.getPassword() == null)) {
 				logger.error("Data must not be null");
-				errorResponse.setMessage(REQUESTEMPTY);
+				errorResponse.setMessage(REQUEST_EMPTY);
 				errorResponse.setStatus(FAIL);
 				errorResponse.setData(null);
 				return new ResponseEntity<>(errorResponse, HttpStatus.UNPROCESSABLE_ENTITY);

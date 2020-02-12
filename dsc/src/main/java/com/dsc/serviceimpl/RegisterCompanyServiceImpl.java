@@ -1,10 +1,15 @@
 package com.dsc.serviceimpl;
 
+import static com.dsc.constants.CompanyConstants.FAIL;
+import static com.dsc.constants.CompanyConstants.REGISTER_SUCCESS;
+import static com.dsc.constants.CompanyConstants.SUCCESS;
+import static com.dsc.constants.CompanyConstants.USER_EXISTS;
+
 import java.security.SecureRandom;
 import java.util.Random;
 
-import org.apache.logging.log4j.LogManager;
-import org.apache.logging.log4j.Logger;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.core.env.Environment;
 import org.springframework.mail.MailAuthenticationException;
@@ -24,10 +29,7 @@ import com.dsc.service.RegisterCompanyService;
 @Service
 public class RegisterCompanyServiceImpl implements RegisterCompanyService {
 
-	public static Integer SUCCESS = 0;
-	public static Integer FAIL = 1;
-	public static String REGISTERSUCCESS = "Company Registration Success.Please wait for the confirmation mail.";
-	public static String USEREXISTS = "User Already Exists with the email";
+	
 	static final String AB = "0123456789ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz";
 	static SecureRandom rnd = new SecureRandom();
 
@@ -44,7 +46,7 @@ public class RegisterCompanyServiceImpl implements RegisterCompanyService {
 	private BCryptPasswordEncoder passwordEncoder;
 
 	UserResponse response = new UserResponse();
-	private final Logger logger = LogManager.getLogger(this.getClass());
+	private static final Logger logger =  LoggerFactory.getLogger(RegisterCompanyServiceImpl.class);
 
 	@Override
 	public UserResponse registerCompany(RegisterCompanyHandler requestBody) throws Exception {
@@ -70,14 +72,14 @@ public class RegisterCompanyServiceImpl implements RegisterCompanyService {
 			sendEmail(email);
 			logger.info("Company registration successfully!");
 			response.setData(mappedDetails);
-			response.setMessage(REGISTERSUCCESS);
+			response.setMessage(REGISTER_SUCCESS);
 			response.setStatus(SUCCESS);
 			return response;
 
 		}
 		logger.error("Failed to process request");
 		response.setStatus(FAIL);
-		response.setMessage(USEREXISTS);
+		response.setMessage(USER_EXISTS);
 		return response;
 	}
 

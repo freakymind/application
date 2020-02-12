@@ -1,10 +1,13 @@
 package com.dsc.controller;
 
+import static com.dsc.constants.CompanyConstants.FAIL;
+import static com.dsc.constants.CompanyConstants.REQUEST_EMPTY;
+
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
-import org.apache.logging.log4j.LogManager;
-import org.apache.logging.log4j.Logger;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -31,10 +34,7 @@ public class RegisterCompanyController {
 	@Autowired
 	AuthenticationManager authenticationManager;
 	
-	private final Logger logger = LogManager.getLogger(this.getClass());
-
-	public static Integer FAIL = 1;
-	public static String REQUESTEMPTY = "Please Enter All the required Details";
+	private static final Logger logger =  LoggerFactory.getLogger(RegisterCompanyController.class);
 	ErrorResponse errorResponse = new ErrorResponse();
 
 //	@Secured({ "SUPER_ADMIN", "COMPANY_ADMIN" })
@@ -62,7 +62,7 @@ public class RegisterCompanyController {
 					|| (requestBody.getMobile().isEmpty() || requestBody.getMobile() == null)
 					|| (requestBody.getCountry().isEmpty() || requestBody.getCountry() == null)) {
 				logger.error("Data must not be null");
-				errorResponse.setMessage(REQUESTEMPTY);
+				errorResponse.setMessage(REQUEST_EMPTY);
 				errorResponse.setStatus(FAIL);
 				errorResponse.setData(null);
 				return new ResponseEntity<>(errorResponse, HttpStatus.UNPROCESSABLE_ENTITY);
