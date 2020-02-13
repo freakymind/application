@@ -10,7 +10,7 @@ import com.dsc.model.RegisterCompany.User;
 public class CompanyMapper {
 
 	public static RegisterCompany mapAllCompanyDetails(RegisterCompanyHandler requestBody) {
-		RegisterCompany allDetails = new RegisterCompany();
+		RegisterCompany allDetails = new RegisterCompany(null, null);
 		Company syncCompanyDetails = syncCompanyDetails(requestBody);
 		ArrayList<User> syncUserDetails = syncUserDetails(requestBody);
 		allDetails.setCompany(syncCompanyDetails);
@@ -31,12 +31,12 @@ public class CompanyMapper {
 	private static ArrayList<User> syncUserDetails(RegisterCompanyHandler requestBody) {
 		ArrayList<User> userDetails = new ArrayList<>();
 		User user = new User();
-		user.setAddress(requestBody.getAddress());
-		user.setCountry(requestBody.getCountry());
-		user.setEmail(requestBody.getEmail());
-		user.setFullname(requestBody.getFullname());
-		user.setMobile(requestBody.getMobile());
-		user.setPassword(requestBody.getPassword());
+		user.setUser_address(requestBody.getUser_address());
+		user.setUser_country(requestBody.getUser_country());
+		user.setEmail(requestBody.getUser_email());
+		user.setUser_name(requestBody.getUser_name());
+		user.setUser_mobile(requestBody.getUser_mobile());
+		user.setPassword(requestBody.getUser_password());
 		userDetails.add(user);
 		return userDetails;
 	}

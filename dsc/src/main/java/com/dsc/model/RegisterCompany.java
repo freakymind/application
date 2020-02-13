@@ -1,15 +1,37 @@
 package com.dsc.model;
 
 import java.util.ArrayList;
+import java.util.Date;
 
+import org.springframework.data.annotation.Id;
 import org.springframework.data.mongodb.core.mapping.Document;
 import org.springframework.data.mongodb.core.mapping.Field;
 
 @Document(collection = "company")
 public class RegisterCompany {
 
+	@Id
+	private String id;
 	private ArrayList<User> user;
 	private Company company;
+
+	public RegisterCompany(String id, ArrayList<User> user) {
+		super();
+		this.id = id;
+		this.user = user;
+	}
+
+	public void addUser(ArrayList<User> user) {
+		this.user.addAll(user);
+	}
+
+	public String getId() {
+		return id;
+	}
+
+	public void setId(String id) {
+		this.id = id;
+	}
 
 	public ArrayList<User> getUser() {
 		return user;
@@ -33,8 +55,10 @@ public class RegisterCompany {
 		private String company_mobile;
 		@Field("company_email")
 		private String email;
-		private String companyRef;
-		private boolean status;
+		private String company_ref;
+		private boolean company_status;
+		private Date created_on;
+		private Date updated_on;
 
 		public String getCompany_name() {
 			return company_name;
@@ -68,50 +92,80 @@ public class RegisterCompany {
 			this.email = email;
 		}
 
-		public String getCompanyRef() {
-			return companyRef;
+		public String getCompany_ref() {
+			return company_ref;
 		}
 
-		public void setCompanyRef(String companyRef) {
-			this.companyRef = companyRef;
+		public void setCompany_ref(String company_ref) {
+			this.company_ref = company_ref;
 		}
 
-		public boolean isStatus() {
-			return status;
+		public boolean isCompany_status() {
+			return company_status;
 		}
 
-		public void setStatus(boolean status) {
-			this.status = status;
+		public void setCompany_status(boolean company_status) {
+			this.company_status = company_status;
+		}
+
+		public Date getCreated_on() {
+			return created_on;
+		}
+
+		public void setCreated_on(Date created_on) {
+			this.created_on = created_on;
+		}
+
+		public Date getUpdated_on() {
+			return updated_on;
+		}
+
+		public void setUpdated_on(Date updated_on) {
+			this.updated_on = updated_on;
 		}
 
 	}
 
 	public static class User {
-		private String fullname;
+		private String user_name;
+		@Field("user_email")
 		private String email;
-		private String mobile;
-		private String address;
-		private String country;
+		private String user_mobile;
+		private String user_address;
+		private String user_country;
+		@Field("user_role")
 		private String role;
+		@Field("user_password")
 		private String password;
-		private String companyRef;
-		private boolean isActive;
+		private boolean user_status;
+		private Date created_on;
+		private Date updated_on;
 
 		public User() {
 			super();
 		}
 
-		public User(String email) {
+		public User(String user_name, String email, String user_mobile, String user_address, String user_country,
+				String role, String password, boolean user_status, Date created_on, Date updated_on) {
 			super();
+			this.user_name = user_name;
 			this.email = email;
+			this.user_mobile = user_mobile;
+			this.user_address = user_address;
+			this.user_country = user_country;
+			this.role = role;
+			this.password = password;
+			this.user_status = user_status;
+			this.created_on = created_on;
+			this.updated_on = updated_on;
 		}
 
-		public String getFullname() {
-			return fullname;
+		public String getUser_name() {
+			return user_name;
 		}
 
-		public void setFullname(String fullname) {
-			this.fullname = fullname;
+		public void setUser_name(String user_name) {
+			this.user_name = user_name;
 		}
 
 		public String getEmail() {
@@ -122,28 +176,28 @@ public class RegisterCompany {
 			this.email = email;
 		}
 
-		public String getMobile() {
-			return mobile;
+		public String getUser_mobile() {
+			return user_mobile;
 		}
 
-		public void setMobile(String mobile) {
-			this.mobile = mobile;
+		public void setUser_mobile(String user_mobile) {
+			this.user_mobile = user_mobile;
 		}
 
-		public String getAddress() {
-			return address;
+		public String getUser_address() {
+			return user_address;
 		}
 
-		public void setAddress(String address) {
-			this.address = address;
+		public void setUser_address(String user_address) {
+			this.user_address = user_address;
 		}
 
-		public String getCountry() {
-			return country;
+		public String getUser_country() {
+			return user_country;
 		}
 
-		public void setCountry(String country) {
-			this.country = country;
+		public void setUser_country(String user_country) {
+			this.user_country = user_country;
 		}
 
 		public String getRole() {
@@ -162,37 +216,29 @@ public class RegisterCompany {
 			this.password = password;
 		}
 
-		public String getCompanyRef() {
-			return companyRef;
+		public boolean isUser_status() {
+			return user_status;
 		}
 
-		public void setCompanyRef(String companyRef) {
-			this.companyRef = companyRef;
+		public void setUser_status(boolean user_status) {
+			this.user_status = user_status;
 		}
 
-		public boolean isActive() {
-			return isActive;
+		public Date getCreated_on() {
+			return created_on;
 		}
 
-		public void setActive(boolean isActive) {
-			this.isActive = isActive;
+		public void setCreated_on(Date created_on) {
+			this.created_on = created_on;
+		}
+
+		public Date getUpdated_on() {
+			return updated_on;
+		}
+
+		public void setUpdated_on(Date updated_on) {
+			this.updated_on = updated_on;
 		}
 
 	}
-
 }
-
-//private String email;
-//private String companyFullName;
-//private String companyRef;
-//private String companyAddress;
-//private String ownerFullName;
-//private Long ownerMobileNum;
-//private String ownerCountry;
-//private String password;
-//private boolean flag;
-//private Date createdDate;
-//private Date updatedDate;
-//private String role;
-//@Field("companyusers")
-//private List<CompanyUserDetails> companyUsers;

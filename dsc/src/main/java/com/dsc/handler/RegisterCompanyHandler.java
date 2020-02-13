@@ -6,13 +6,14 @@ public class RegisterCompanyHandler {
 	private String company_address;
 	private String company_mobile;
 	private String company_email;
+	private String company_ref;
 
-	private String fullname;
-	private String email;
-	private String mobile;
-	private String address;
-	private String country;
-	private String password;
+	private String user_name;
+	private String user_email;
+	private String user_mobile;
+	private String user_address;
+	private String user_country;
+	private String user_password;
 
 	public String getCompany_name() {
 		return company_name;
@@ -46,52 +47,60 @@ public class RegisterCompanyHandler {
 		this.company_email = company_email;
 	}
 
-	public String getFullname() {
-		return fullname;
+	public String getCompany_ref() {
+		return company_ref;
 	}
 
-	public void setFullname(String fullname) {
-		this.fullname = fullname;
+	public void setCompany_ref(String company_ref) {
+		this.company_ref = company_ref;
 	}
 
-	public String getEmail() {
-		return email;
+	public String getUser_name() {
+		return user_name;
 	}
 
-	public void setEmail(String email) {
-		this.email = email;
+	public void setUser_name(String user_name) {
+		this.user_name = user_name;
 	}
 
-	public String getMobile() {
-		return mobile;
+	public String getUser_email() {
+		return user_email;
 	}
 
-	public void setMobile(String mobile) {
-		this.mobile = mobile;
+	public void setUser_email(String user_email) {
+		this.user_email = user_email;
 	}
 
-	public String getAddress() {
-		return address;
+	public String getUser_mobile() {
+		return user_mobile;
 	}
 
-	public void setAddress(String address) {
-		this.address = address;
+	public void setUser_mobile(String user_mobile) {
+		this.user_mobile = user_mobile;
 	}
 
-	public String getCountry() {
-		return country;
+	public String getUser_address() {
+		return user_address;
 	}
 
-	public void setCountry(String country) {
-		this.country = country;
+	public void setUser_address(String user_address) {
+		this.user_address = user_address;
 	}
 
-	public String getPassword() {
-		return password;
+	public String getUser_country() {
+		return user_country;
 	}
 
-	public void setPassword(String password) {
-		this.password = password;
+	public void setUser_country(String user_country) {
+		this.user_country = user_country;
+	}
+
+	public String getUser_password() {
+		return user_password;
+	}
+
+	public void setUser_password(String user_password) {
+		this.user_password = user_password;
 	}
 
 }

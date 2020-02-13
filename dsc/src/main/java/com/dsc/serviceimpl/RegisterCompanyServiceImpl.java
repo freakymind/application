@@ -5,7 +5,7 @@ import static com.dsc.constants.CompanyConstants.REGISTER_SUCCESS;
 import static com.dsc.constants.CompanyConstants.SUCCESS;
 import static com.dsc.constants.CompanyConstants.USER_EXISTS;
 
-import java.security.SecureRandom;
+import java.util.Date;
 import java.util.Random;
 
 import org.slf4j.Logger;
@@ -30,9 +30,6 @@ import com.dsc.service.RegisterCompanyService;
 public class RegisterCompanyServiceImpl implements RegisterCompanyService {
 
 	
-	static final String AB = "0123456789ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz";
-	static SecureRandom rnd = new SecureRandom();
-
 	@Autowired
 	private RegisterCompnayDao regCompdao;
 
@@ -53,22 +50,24 @@ public class RegisterCompanyServiceImpl implements RegisterCompanyService {
 		logger.debug("Incoming request : " + requestBody);
 
 		RegisterCompany mappedDetails = CompanyMapper.mapAllCompanyDetails(requestBody);
+		Date date = new Date();
 		RegisterCompany details = null;
-		details = regCompdao.findByUserEmail(requestBody.getEmail());
+		details = regCompdao.findByUserEmail(requestBody.getUser_email());
 		if (details == null) {
-			if (requestBody.getPassword() == null) {
+			if (requestBody.getUser_password() == null) {
 				mappedDetails.getUser().get(0).setPassword("Ojas1525");
 			}
 			String encode = passwordEncoder.encode(mappedDetails.getUser().get(0).getPassword());
 			mappedDetails.getUser().get(0).setPassword(encode);
 			String generatedCompanyRef = generatecompanyReference();
-			mappedDetails.getUser().get(0).setCompanyRef(generatedCompanyRef);
 			mappedDetails.getUser().get(0).setRole("COMPANY_ADMIN");
-			mappedDetails.getUser().get(0).setActive(false);
-			mappedDetails.getCompany().setCompanyRef(generatedCompanyRef);
-			mappedDetails.getCompany().setStatus(false);
+			mappedDetails.getUser().get(0).setUser_status(true);
+			mappedDetails.getUser().get(0).setCreated_on(date);
+			mappedDetails.getCompany().setCompany_ref(generatedCompanyRef);
+			mappedDetails.getCompany().setCompany_status(false);
+			mappedDetails.getCompany().setCreated_on(date);
 			regCompdao.save(mappedDetails);
-			String email = requestBody.getEmail();
+			String email = requestBody.getUser_email();
 			sendEmail(email);
 			logger.info("Company registration successfully!");
 			response.setData(mappedDetails);

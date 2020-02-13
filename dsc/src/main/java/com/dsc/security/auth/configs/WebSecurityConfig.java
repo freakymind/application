@@ -52,9 +52,10 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
 		http.csrf().disable().httpBasic().disable().sessionManagement()
 				.sessionCreationPolicy(SessionCreationPolicy.STATELESS).and().anonymous().and().exceptionHandling()
 				.authenticationEntryPoint((req, resp, e) -> resp.sendError(HttpServletResponse.SC_UNAUTHORIZED)).and()
-				.authorizeRequests().antMatchers("/service/login").permitAll().antMatchers("/service/registercompany")
-				.permitAll().antMatchers("/service/companyusers/**").permitAll().antMatchers("/service/distributors/**")
-				.permitAll().antMatchers("/service/products/**").permitAll().anyRequest().authenticated().and()
+				.authorizeRequests().antMatchers("/service/login").permitAll()
+				.antMatchers("/service/registercompany").permitAll()
+				.antMatchers("/service/companyusers/**").hasAuthority("COMPANY_ADMIN")
+				.antMatchers("/service/distributors/**").permitAll().antMatchers("/service/products/**").permitAll().anyRequest().authenticated().and()
 				.apply(new JwtConfigurer(jwtTokenProvider));
 	}
 }
