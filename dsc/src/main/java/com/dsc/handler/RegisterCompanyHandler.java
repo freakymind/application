@@ -14,6 +14,8 @@ public class RegisterCompanyHandler {
 	private String user_address;
 	private String user_country;
 	private String user_password;
+	
+	private String distributor_name;
 
 	public String getCompany_name() {
 		return company_name;
@@ -103,4 +105,13 @@ public class RegisterCompanyHandler {
 		this.user_password = user_password;
 	}
 
+	public String getDistributor_name() {
+		return distributor_name;
+	}
+
+	public void setDistributor_name(String distributor_name) {
+		this.distributor_name = distributor_name;
+	}
+
+	
 }

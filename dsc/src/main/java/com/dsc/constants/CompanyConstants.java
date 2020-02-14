@@ -7,6 +7,8 @@ public class CompanyConstants {
 	
 	public static final String REGISTER_SUCCESS = "Company Registration is Successful. You will receive an email once your account is verified by Admin.";
 	public static final String COMPANYUSER_SUCCESS = "Company User added successfully !";
+	public static final String DISTRIBUTOR_SUCCESS = "Distributor added successfully !";
+	
 	public static final String FAILED = "Company Registration is Failed.";
 	public static String USER_EXISTS = "User Already Exists with the email";
 	

@@ -12,8 +12,9 @@ public class RegisterCompany {
 
 	@Id
 	private String id;
-	private ArrayList<User> user;
 	private Company company;
+	private ArrayList<User> user;
+	private ArrayList<Distributor> distributor;
 
 	public RegisterCompany() {
 		super();
@@ -52,6 +53,14 @@ public class RegisterCompany {
 
 	public void setCompany(Company company) {
 		this.company = company;
+	}
+
+	public ArrayList<Distributor> getDistributor() {
+		return distributor;
+	}
+
+	public void setDistributor(ArrayList<Distributor> distributor) {
+		this.distributor = distributor;
 	}
 
 	public static class Company {
@@ -263,4 +272,38 @@ public class RegisterCompany {
 		}
 
 	}
+
+	public static class Distributor {
+
+		private String company_ref;
+		private String distributor_name;
+
+		public Distributor() {
+			super();
+		}
+
+		public Distributor(String company_ref, String distributor_name) {
+			super();
+			this.company_ref = company_ref;
+			this.distributor_name = distributor_name;
+		}
+
+		public String getCompany_ref() {
+			return company_ref;
+		}
+
+		public void setCompany_ref(String company_ref) {
+			this.company_ref = company_ref;
+		}
+
+		public String getDistributor_name() {
+			return distributor_name;
+		}
+
+		public void setDistributor_name(String distributor_name) {
+			this.distributor_name = distributor_name;
+		}
+
+	}
+
 }

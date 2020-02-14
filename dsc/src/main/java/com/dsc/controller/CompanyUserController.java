@@ -53,7 +53,8 @@ public class CompanyUserController {
 					|| (requestBody.getUser_address().isEmpty() || requestBody.getUser_address() == null)
 					|| (requestBody.getUser_name().isEmpty() || requestBody.getUser_name() == null)
 					|| (requestBody.getUser_mobile().isEmpty() || requestBody.getUser_mobile() == null)
-					|| (requestBody.getUser_country().isEmpty() || requestBody.getUser_country() == null)) {
+					|| (requestBody.getUser_country().isEmpty() || requestBody.getUser_country() == null)
+					|| (requestBody.getCompany_ref().isEmpty() || requestBody.getCompany_ref() == null)) {
 				logger.error("Data must not be null");
 				errorResponse.setMessage(REQUEST_EMPTY);
 				errorResponse.setStatus(FAIL);
@@ -66,7 +67,7 @@ public class CompanyUserController {
 		} catch (Exception e) {
 			logger.error("Exception caught : " + e.getMessage());
 			errorResponse.setStatus(FAIL);
-			errorResponse.setMessage("Exception caught Register Compnay User controller!");
+			errorResponse.setMessage("Exception caught Compnay User controller!");
 			return new ResponseEntity<>(errorResponse, HttpStatus.CONFLICT);
 
 		}

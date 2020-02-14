@@ -5,6 +5,7 @@ import java.util.ArrayList;
 import com.dsc.handler.RegisterCompanyHandler;
 import com.dsc.model.RegisterCompany;
 import com.dsc.model.RegisterCompany.Company;
+import com.dsc.model.RegisterCompany.Distributor;
 import com.dsc.model.RegisterCompany.User;
 
 public class CompanyMapper {
@@ -13,8 +14,10 @@ public class CompanyMapper {
 		RegisterCompany allDetails = new RegisterCompany(null, null, null);
 		Company syncCompanyDetails = syncCompanyDetails(requestBody);
 		ArrayList<User> syncUserDetails = syncUserDetails(requestBody);
+		ArrayList<Distributor> syncDistributorDetails = syncDistributorDetails(requestBody);
 		allDetails.setCompany(syncCompanyDetails);
 		allDetails.setUser(syncUserDetails);
+		allDetails.setDistributor(syncDistributorDetails);
 		return allDetails;
 
 	}
@@ -39,5 +42,14 @@ public class CompanyMapper {
 		user.setPassword(requestBody.getUser_password());
 		userDetails.add(user);
 		return userDetails;
+	}
+
+	private static ArrayList<Distributor> syncDistributorDetails(RegisterCompanyHandler requestBody) {
+		ArrayList<Distributor> distlist = new ArrayList<>();
+		Distributor dist = new Distributor();
+		dist.setCompany_ref(requestBody.getCompany_ref());
+		dist.setDistributor_name(requestBody.getUser_name());
+		distlist.add(dist);
+		return distlist;
 	}
 }
