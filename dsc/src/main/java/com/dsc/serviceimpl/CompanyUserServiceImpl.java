@@ -43,45 +43,49 @@ public class CompanyUserServiceImpl implements CompanyUserService {
 	@Override
 	public UserResponse registerCompanyUser(RegisterCompanyHandler requestBody) throws Exception {
 		logger.debug("Incoming request : " + requestBody);
-		RegisterCompany regcompany = new RegisterCompany(null, null);
 		RegisterCompany allCompanyDetails = CompanyMapper.mapAllCompanyDetails(requestBody);
 		List<RegisterCompany> findAll = regCompdao.findAll();
-		String id = findAll.get(0).getId();
-		Company company = findAll.get(0).getCompany();
 
-		ArrayList<User> list = findAll.get(0).getUser();
 		for (RegisterCompany compRef : findAll) {
 			String companyRef = compRef.getCompany().getCompany_ref();
 
 			if (requestBody.getCompany_ref().equals(companyRef)) {
+				
+				
+				ArrayList<User> list2 = compRef.getUser();
+				Company company = compRef.getCompany();
+				
+				ArrayList<User> user = allCompanyDetails.getUser();
+				Date date = new Date();
+				RegisterCompany details = null;
+				details = regCompdao.findByUserEmail(requestBody.getUser_email());
+				RegisterCompany findByCompany_ref = regCompdao.findByCompanycompany_ref(requestBody.getCompany_ref());
 
-			ArrayList<User> user = allCompanyDetails.getUser();
-			Date date = new Date();
-			RegisterCompany details = null;
-			details = regCompdao.findByUserEmail(requestBody.getUser_email());
-			if (details == null) {
-				if (requestBody.getUser_password() == null) {
-					user.get(0).setPassword("Ojas1525");
+				if (details == null) {
+					if (requestBody.getUser_password() == null) {
+						user.get(0).setPassword("Ojas1525");
+					}
+					String encode = passwordEncoder.encode(user.get(0).getPassword());
+					user.get(0).setPassword(encode);
+					user.get(0).setRole("COMPANY_USER");
+					user.get(0).setUser_status(true);
+					user.get(0).setCreated_on(date);
+					list2.addAll(user);
+
+					String id = findByCompany_ref.getId();
+					logger.info("Id is :" + id);
+					allCompanyDetails.setUser(list2);
+					allCompanyDetails.setId(id);
+					allCompanyDetails.setCompany(company);
+					regCompdao.save(allCompanyDetails);
+					logger.info("Company User added successfully!");
+					response.setData(user);
+					response.setMessage(COMPANYUSER_SUCCESS);
+					response.setStatus(SUCCESS);
+					return response;
+
 				}
-				String encode = passwordEncoder.encode(user.get(0).getPassword());
-				user.get(0).setPassword(encode);
-				user.get(0).setRole("COMPANY_USER");
-				user.get(0).setUser_status(true);
-				user.get(0).setCreated_on(date);
-				list.addAll(user);
-				allCompanyDetails.setUser(list);
-				allCompanyDetails.setId(id);
-				allCompanyDetails.setCompany(company);
-//				regCompdao.findOneIncludeOnlyUser(id, list);
-//				regCompdao.
-				logger.info("Company User added successfully!");
-				response.setData(list);
-				response.setMessage(COMPANYUSER_SUCCESS);
-				response.setStatus(SUCCESS);
-				return response;
-
 			}
-		}
 		}
 		logger.error("Failed to process request");
 		response.setStatus(FAIL);

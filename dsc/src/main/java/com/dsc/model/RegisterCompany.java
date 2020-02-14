@@ -15,10 +15,15 @@ public class RegisterCompany {
 	private ArrayList<User> user;
 	private Company company;
 
-	public RegisterCompany(String id, ArrayList<User> user) {
+	public RegisterCompany() {
+		super();
+	}
+
+	public RegisterCompany(String id, ArrayList<User> user, Company company) {
 		super();
 		this.id = id;
 		this.user = user;
+		this.company = company;
 	}
 
 	public void addUser(ArrayList<User> user) {
@@ -59,6 +64,23 @@ public class RegisterCompany {
 		private boolean company_status;
 		private Date created_on;
 		private Date updated_on;
+
+		public Company() {
+			super();
+		}
+
+		public Company(String company_name, String company_address, String company_mobile, String email,
+				String company_ref, boolean company_status, Date created_on, Date updated_on) {
+			super();
+			this.company_name = company_name;
+			this.company_address = company_address;
+			this.company_mobile = company_mobile;
+			this.email = email;
+			this.company_ref = company_ref;
+			this.company_status = company_status;
+			this.created_on = created_on;
+			this.updated_on = updated_on;
+		}
 
 		public String getCompany_name() {
 			return company_name;

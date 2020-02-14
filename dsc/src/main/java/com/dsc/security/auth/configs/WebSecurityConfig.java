@@ -55,7 +55,10 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
 				.authorizeRequests().antMatchers("/service/login").permitAll()
 				.antMatchers("/service/registercompany").permitAll()
 				.antMatchers("/service/companyusers/**").hasAuthority("COMPANY_ADMIN")
-				.antMatchers("/service/distributors/**").permitAll().antMatchers("/service/products/**").permitAll().anyRequest().authenticated().and()
+				.antMatchers("/service/distributors/**").hasAnyAuthority("COMPANY_ADMIN", "COMPANY_USER")
+				.antMatchers("/service/products/**").hasAnyAuthority("COMPANY_ADMIN", "COMPANY_USER")
+				.anyRequest().authenticated()
+				.and()
 				.apply(new JwtConfigurer(jwtTokenProvider));
 	}
 }

@@ -10,7 +10,7 @@ import com.dsc.model.RegisterCompany.User;
 public class CompanyMapper {
 
 	public static RegisterCompany mapAllCompanyDetails(RegisterCompanyHandler requestBody) {
-		RegisterCompany allDetails = new RegisterCompany(null, null);
+		RegisterCompany allDetails = new RegisterCompany(null, null, null);
 		Company syncCompanyDetails = syncCompanyDetails(requestBody);
 		ArrayList<User> syncUserDetails = syncUserDetails(requestBody);
 		allDetails.setCompany(syncCompanyDetails);

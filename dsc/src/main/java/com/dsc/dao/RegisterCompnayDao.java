@@ -1,13 +1,10 @@
 package com.dsc.dao;
 
-import java.util.ArrayList;
-
 import org.springframework.data.mongodb.repository.MongoRepository;
 import org.springframework.data.mongodb.repository.Query;
 import org.springframework.stereotype.Repository;
 
 import com.dsc.model.RegisterCompany;
-import com.dsc.model.RegisterCompany.User;
 
 @Repository
 public interface RegisterCompnayDao extends MongoRepository<RegisterCompany, String> {
@@ -15,7 +12,12 @@ public interface RegisterCompnayDao extends MongoRepository<RegisterCompany, Str
 	@Query(value = "{ 'user': { $elemMatch: { 'email' : ?0 } }}")
 	RegisterCompany findByUserEmail(String email);
 
-	@Query(value = "{'id' : ?0 }", fields = "{ 'user' : 1 }")
-	RegisterCompany findOneIncludeOnlyUser(String id, ArrayList<User> user);
+	
+	@Query(value = "{ 'company.company_ref' : ?0 }")
+	RegisterCompany findByCompanycompany_ref(String company_ref);
+	
+//	@Query(value = "{'id' : ?0 }", fields = "{ 'user' : 1 }")
+//	@Query(value = "{'id':?0},{$push:{'user':?1}}}")
+//	RegisterCompany findOneIncludeOnlyUser(String id, RegisterCompany registerCompany);
 
 }

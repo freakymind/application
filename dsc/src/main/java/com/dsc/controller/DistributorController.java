@@ -8,7 +8,6 @@ import javax.servlet.http.HttpServletResponse;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.annotation.Secured;
@@ -20,23 +19,19 @@ import org.springframework.web.bind.annotation.RestController;
 
 import com.dsc.handler.RegisterCompanyHandler;
 import com.dsc.response.ErrorResponse;
-import com.dsc.response.UserResponse;
-import com.dsc.serviceimpl.CompanyUserServiceImpl;
 
 @RestController
 @RequestMapping("/service/companyusers")
 @CrossOrigin(origins = "*", maxAge = 3600)
-public class CompanyUserController {
-
-	@Autowired
-	CompanyUserServiceImpl compuserService;
-
+public class DistributorController {
+	
+	
 	private static final Logger logger = LoggerFactory.getLogger(RegisterCompanyController.class);
 	ErrorResponse errorResponse = new ErrorResponse();
 
-	@Secured({ "COMPANY_ADMIN" })
-	@PutMapping("/addcompanyuser")
-	public ResponseEntity<Object> registerCompanyUser(@RequestBody RegisterCompanyHandler requestBody,
+	@Secured({ "COMPANY_ADMIN" , "COMPNAY_USER"})
+	@PutMapping("/add_distributor")
+	public ResponseEntity<Object> registerDistributor(@RequestBody RegisterCompanyHandler requestBody,
 			HttpServletRequest request, HttpServletResponse response) {
 		logger.debug("Incoming request : " + requestBody);
 
@@ -60,16 +55,18 @@ public class CompanyUserController {
 				errorResponse.setData(null);
 				return new ResponseEntity<>(errorResponse, HttpStatus.UNPROCESSABLE_ENTITY);
 			}
-			UserResponse companyUserResp = compuserService.registerCompanyUser(requestBody);
-			return new ResponseEntity<>(companyUserResp, HttpStatus.OK);
+//			UserResponse companyUserResp = compuserService.registerCompanyUser(requestBody);
+//			return new ResponseEntity<>(companyUserResp, HttpStatus.OK);
 
 		} catch (Exception e) {
 			logger.error("Exception caught : " + e.getMessage());
 			errorResponse.setStatus(FAIL);
-			errorResponse.setMessage("Exception caught Register Compnay User controller!");
+			errorResponse.setMessage("Exception caught Distributor controller!");
 			return new ResponseEntity<>(errorResponse, HttpStatus.CONFLICT);
 
 		}
+		return null;
 	}
+
 
 }
