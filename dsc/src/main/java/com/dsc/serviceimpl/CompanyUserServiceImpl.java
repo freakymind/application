@@ -1,6 +1,7 @@
 package com.dsc.serviceimpl;
 
 import static com.dsc.constants.CompanyConstants.COMPANYUSER_SUCCESS;
+import static com.dsc.constants.CompanyConstants.COMPANYUSER_UPDATED_SUCCESS;
 import static com.dsc.constants.CompanyConstants.FAIL;
 import static com.dsc.constants.CompanyConstants.SUCCESS;
 import static com.dsc.constants.CompanyConstants.USER_EXISTS;
@@ -83,6 +84,55 @@ public class CompanyUserServiceImpl implements CompanyUserService {
 			}
 		}
 		logger.error("Failed to process request");
+		response.setStatus(FAIL);
+		response.setMessage(USER_EXISTS);
+		return response;
+	}
+
+	@Override
+	public UserResponse updateCompanyUser(RegisterCompanyHandler requestBody) throws Exception {
+		logger.debug("Incoming update request : " + requestBody);
+		RegisterCompany allCompanyDetails = CompanyMapper.mapAllCompanyDetails(requestBody);
+
+		ArrayList<User> user = allCompanyDetails.getUser();
+		Date date = new Date();
+
+		RegisterCompany findByUserEmailObj = regCompdao.findByUserEmail(requestBody.getUser_email());
+		Company company = findByUserEmailObj.getCompany();
+		ArrayList<User> userarrayList = findByUserEmailObj.getUser();
+
+		for (User userdata : userarrayList) {
+			String email1 = userdata.getEmail();
+			String role = userdata.getRole();
+			Date created_on = userdata.getCreated_on();
+
+			if (email1.equals(requestBody.getUser_email()) && role.equals(requestBody.getUser_role())) {
+
+				String encode = passwordEncoder.encode(user.get(0).getPassword());
+				user.get(0).setPassword(encode);
+				user.get(0).setRole(role);
+				user.get(0).setUser_status(true);
+				user.get(0).setCreated_on(created_on);
+				user.get(0).setUpdated_on(date);
+				user.get(0).setEmail(email1);
+				allCompanyDetails.setUser(user);
+				
+				String id = findByUserEmailObj.getId();
+				logger.info("Id is :" + id);
+				allCompanyDetails.setId(id);
+				allCompanyDetails.setUser(userarrayList);
+				allCompanyDetails.setCompany(company);
+				regCompdao.save(allCompanyDetails);
+				logger.info("Company User updated successfully!");
+				response.setData(user);
+				response.setMessage(COMPANYUSER_UPDATED_SUCCESS);
+				response.setStatus(SUCCESS);
+				return response;
+			}
+
+			
+		}
+		logger.error("Failed to process update request");
 		response.setStatus(FAIL);
 		response.setMessage(USER_EXISTS);
 		return response;

@@ -37,7 +37,6 @@ public class RegisterCompanyController {
 	private static final Logger logger = LoggerFactory.getLogger(RegisterCompanyController.class);
 	ErrorResponse errorResponse = new ErrorResponse();
 
-//	@Secured({ "SUPER_ADMIN", "COMPANY_ADMIN" })
 	@PostMapping("/registercompany")
 	public ResponseEntity<Object> registerCompany(@RequestBody RegisterCompanyHandler requestBody,
 			HttpServletRequest request, HttpServletResponse response) {

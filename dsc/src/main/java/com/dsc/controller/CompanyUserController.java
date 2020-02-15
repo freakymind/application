@@ -13,6 +13,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.annotation.Secured;
 import org.springframework.web.bind.annotation.CrossOrigin;
+import org.springframework.web.bind.annotation.PatchMapping;
 import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -24,7 +25,7 @@ import com.dsc.response.UserResponse;
 import com.dsc.serviceimpl.CompanyUserServiceImpl;
 
 @RestController
-@RequestMapping("/service/companyusers")
+@RequestMapping("/service/companyusers/**")
 @CrossOrigin(origins = "*", maxAge = 3600)
 public class CompanyUserController {
 
@@ -68,6 +69,44 @@ public class CompanyUserController {
 			logger.error("Exception caught : " + e.getMessage());
 			errorResponse.setStatus(FAIL);
 			errorResponse.setMessage("Exception caught Compnay User controller!");
+			return new ResponseEntity<>(errorResponse, HttpStatus.CONFLICT);
+
+		}
+	}
+
+	@Secured({ "COMPANY_ADMIN" })
+	@PatchMapping("/update_user")
+	public ResponseEntity<Object> UpdateCompanyUser(@RequestBody RegisterCompanyHandler requestBody,
+			 HttpServletRequest request, HttpServletResponse response) {
+		logger.debug("Incoming request : " + requestBody);
+
+		try {
+
+			if (requestBody == null) {
+				logger.error("Invalid request");
+				errorResponse.setStatus(FAIL);
+				errorResponse.setMessage("Invalid Request");
+				return new ResponseEntity<>(errorResponse, HttpStatus.UNPROCESSABLE_ENTITY);
+			}
+
+			if ((requestBody.getUser_email().isEmpty() || requestBody.getUser_email() == null)
+					|| (requestBody.getUser_address().isEmpty() || requestBody.getUser_address() == null)
+					|| (requestBody.getUser_name().isEmpty() || requestBody.getUser_name() == null)
+					|| (requestBody.getUser_mobile().isEmpty() || requestBody.getUser_mobile() == null)
+					|| (requestBody.getUser_country().isEmpty() || requestBody.getUser_country() == null)) {
+				logger.error("Data must not be null");
+				errorResponse.setMessage(REQUEST_EMPTY);
+				errorResponse.setStatus(FAIL);
+				errorResponse.setData(null);
+				return new ResponseEntity<>(errorResponse, HttpStatus.UNPROCESSABLE_ENTITY);
+			}
+			UserResponse companyUserResp = compuserService.updateCompanyUser(requestBody);
+			return new ResponseEntity<>(companyUserResp, HttpStatus.OK);
+
+		} catch (Exception e) {
+			logger.error("Exception caught : " + e.getMessage());
+			errorResponse.setStatus(FAIL);
+			errorResponse.setMessage("Exception caught Compnay User update controller!");
 			return new ResponseEntity<>(errorResponse, HttpStatus.CONFLICT);
 
 		}
