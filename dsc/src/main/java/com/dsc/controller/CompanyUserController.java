@@ -32,7 +32,7 @@ public class CompanyUserController {
 	@Autowired
 	CompanyUserServiceImpl compuserService;
 
-	private static final Logger logger = LoggerFactory.getLogger(RegisterCompanyController.class);
+	private static final Logger logger = LoggerFactory.getLogger(CompanyUserController.class);
 	ErrorResponse errorResponse = new ErrorResponse();
 
 	@Secured({ "COMPANY_ADMIN" })

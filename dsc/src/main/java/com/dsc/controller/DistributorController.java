@@ -31,7 +31,7 @@ public class DistributorController {
 	@Autowired
 	private DistributorServiceImpl distServiceImpl;
 
-	private static final Logger logger = LoggerFactory.getLogger(RegisterCompanyController.class);
+	private static final Logger logger = LoggerFactory.getLogger(DistributorController.class);
 	ErrorResponse errorResponse = new ErrorResponse();
 
 	@Secured({ "COMPANY_ADMIN", "COMPNAY_USER" })

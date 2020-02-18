@@ -190,7 +190,7 @@ public class RegisterCompany {
 			this.created_on = created_on;
 			this.updated_on = updated_on;
 		}
-
+ 
 		public String getUser_name() {
 			return user_name;
 		}
