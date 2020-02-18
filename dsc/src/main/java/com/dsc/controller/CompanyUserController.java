@@ -13,7 +13,6 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.annotation.Secured;
 import org.springframework.web.bind.annotation.CrossOrigin;
-import org.springframework.web.bind.annotation.PatchMapping;
 import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -75,7 +74,8 @@ public class CompanyUserController {
 	}
 
 	@Secured({ "COMPANY_ADMIN" })
-	@PatchMapping("/update_user")
+//	@PatchMapping("/update_user")
+	@PutMapping("/update_user")
 	public ResponseEntity<Object> UpdateCompanyUser(@RequestBody RegisterCompanyHandler requestBody,
 			 HttpServletRequest request, HttpServletResponse response) {
 		logger.debug("Incoming request : " + requestBody);

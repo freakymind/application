@@ -21,6 +21,7 @@ import com.dsc.handler.RegisterCompanyHandler;
 import com.dsc.mapper.CompanyMapper;
 import com.dsc.model.RegisterCompany;
 import com.dsc.model.RegisterCompany.Company;
+import com.dsc.model.RegisterCompany.Distributor;
 import com.dsc.model.RegisterCompany.User;
 import com.dsc.response.UserResponse;
 import com.dsc.service.CompanyUserService;
@@ -100,6 +101,7 @@ public class CompanyUserServiceImpl implements CompanyUserService {
 		RegisterCompany findByUserEmailObj = regCompdao.findByUserEmail(requestBody.getUser_email());
 		Company company = findByUserEmailObj.getCompany();
 		ArrayList<User> userarrayList = findByUserEmailObj.getUser();
+		ArrayList<Distributor> distlist = findByUserEmailObj.getDistributor();
 
 		for (User userdata : userarrayList) {
 			String email1 = userdata.getEmail();
@@ -107,30 +109,31 @@ public class CompanyUserServiceImpl implements CompanyUserService {
 			Date created_on = userdata.getCreated_on();
 
 			if (email1.equals(requestBody.getUser_email()) && role.equals(requestBody.getUser_role())) {
-
 				String encode = passwordEncoder.encode(user.get(0).getPassword());
-				user.get(0).setPassword(encode);
-				user.get(0).setRole(role);
-				user.get(0).setUser_status(true);
-				user.get(0).setCreated_on(created_on);
-				user.get(0).setUpdated_on(date);
-				user.get(0).setEmail(email1);
-				allCompanyDetails.setUser(user);
-				
+				userdata.setPassword(encode);
+				userdata.setRole(role);
+				userdata.setUser_status(true);
+				userdata.setCreated_on(created_on);
+				userdata.setUpdated_on(date);
+				userdata.setEmail(email1);
+				userdata.setUser_address(requestBody.getUser_address());
+				userdata.setUser_country(requestBody.getUser_country());
+				userdata.setUser_mobile(requestBody.getUser_mobile());
+				userdata.setUser_name(requestBody.getUser_name());
+				userarrayList.add(userdata);
 				String id = findByUserEmailObj.getId();
 				logger.info("Id is :" + id);
 				allCompanyDetails.setId(id);
 				allCompanyDetails.setUser(userarrayList);
 				allCompanyDetails.setCompany(company);
 				regCompdao.save(allCompanyDetails);
-				logger.info("Company User updated successfully!");
+				logger.info("User details updated successfully!");
 				response.setData(user);
 				response.setMessage(COMPANYUSER_UPDATED_SUCCESS);
 				response.setStatus(SUCCESS);
 				return response;
 			}
 
-			
 		}
 		logger.error("Failed to process update request");
 		response.setStatus(FAIL);
