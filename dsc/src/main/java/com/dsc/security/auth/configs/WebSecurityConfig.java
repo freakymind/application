@@ -53,6 +53,7 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
 				.sessionCreationPolicy(SessionCreationPolicy.STATELESS).and().anonymous().and().exceptionHandling()
 				.authenticationEntryPoint((req, resp, e) -> resp.sendError(HttpServletResponse.SC_UNAUTHORIZED)).and()
 				.authorizeRequests().antMatchers("/service/login").permitAll()
+				.antMatchers("/service/getall").permitAll()
 				.antMatchers("/service/registercompany").permitAll()
 				.antMatchers("/service/companyusers/**").hasAuthority("COMPANY_ADMIN")
 				.antMatchers("/service/distributors/**").hasAnyAuthority("COMPANY_ADMIN", "COMPANY_USER")

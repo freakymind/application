@@ -21,7 +21,6 @@ import com.dsc.handler.RegisterCompanyHandler;
 import com.dsc.mapper.CompanyMapper;
 import com.dsc.model.RegisterCompany;
 import com.dsc.model.RegisterCompany.Company;
-import com.dsc.model.RegisterCompany.Distributor;
 import com.dsc.model.RegisterCompany.User;
 import com.dsc.response.UserResponse;
 import com.dsc.service.CompanyUserService;
@@ -101,7 +100,6 @@ public class CompanyUserServiceImpl implements CompanyUserService {
 		RegisterCompany findByUserEmailObj = regCompdao.findByUserEmail(requestBody.getUser_email());
 		Company company = findByUserEmailObj.getCompany();
 		ArrayList<User> userarrayList = findByUserEmailObj.getUser();
-		ArrayList<Distributor> distlist = findByUserEmailObj.getDistributor();
 
 		for (User userdata : userarrayList) {
 			String email1 = userdata.getEmail();

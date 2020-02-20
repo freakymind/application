@@ -13,6 +13,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.web.bind.annotation.CrossOrigin;
+import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -24,7 +25,7 @@ import com.dsc.response.UserResponse;
 import com.dsc.serviceimpl.RegisterCompanyServiceImpl;
 
 @RestController
-@RequestMapping("/service")
+@RequestMapping("/service/**")
 @CrossOrigin(origins = "*", maxAge = 3600)
 public class RegisterCompanyController {
 
@@ -78,4 +79,11 @@ public class RegisterCompanyController {
 		}
 	}
 
+	@GetMapping("/getall")
+	public ResponseEntity<Object> getRegisterCompany(HttpServletRequest request, HttpServletResponse response) throws Exception {
+		logger.debug("Incoming request : " );
+
+		UserResponse userResponse = regCompService.getregisterCompany();
+		return new ResponseEntity<>(userResponse, HttpStatus.OK);
+	}
 }

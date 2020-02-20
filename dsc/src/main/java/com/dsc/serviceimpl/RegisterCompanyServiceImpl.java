@@ -4,8 +4,10 @@ import static com.dsc.constants.CompanyConstants.FAIL;
 import static com.dsc.constants.CompanyConstants.REGISTER_SUCCESS;
 import static com.dsc.constants.CompanyConstants.SUCCESS;
 import static com.dsc.constants.CompanyConstants.USER_EXISTS;
+import static com.dsc.constants.CompanyConstants.NO_RECORDS;
 
 import java.util.Date;
+import java.util.List;
 import java.util.Random;
 
 import org.slf4j.Logger;
@@ -29,7 +31,6 @@ import com.dsc.service.RegisterCompanyService;
 @Service
 public class RegisterCompanyServiceImpl implements RegisterCompanyService {
 
-	
 	@Autowired
 	private RegisterCompnayDao regCompdao;
 
@@ -43,7 +44,7 @@ public class RegisterCompanyServiceImpl implements RegisterCompanyService {
 	private BCryptPasswordEncoder passwordEncoder;
 
 	UserResponse response = new UserResponse();
-	private static final Logger logger =  LoggerFactory.getLogger(RegisterCompanyServiceImpl.class);
+	private static final Logger logger = LoggerFactory.getLogger(RegisterCompanyServiceImpl.class);
 
 	@Override
 	public UserResponse registerCompany(RegisterCompanyHandler requestBody) throws Exception {
@@ -109,5 +110,24 @@ public class RegisterCompanyServiceImpl implements RegisterCompanyService {
 			e.printStackTrace();
 			throw new MailAuthenticationException("Invalid Credentials !");
 		}
+	}
+
+	@Override
+	public UserResponse getregisterCompany() throws Exception {
+		List<RegisterCompany> findAll = regCompdao.findAll();
+
+		if (findAll.isEmpty()) {
+			logger.info("No records found !");
+			response.setMessage(NO_RECORDS);
+			response.setData(findAll);
+			response.setStatus(FAIL);
+			return response;
+
+		}
+		logger.info("Get all Company details successfully!");
+		response.setData(findAll);
+		response.setStatus(SUCCESS);
+		return response;
+
 	}
 }
