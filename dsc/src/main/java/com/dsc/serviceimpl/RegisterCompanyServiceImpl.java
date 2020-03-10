@@ -1,10 +1,12 @@
 package com.dsc.serviceimpl;
 
+import static com.dsc.constants.CompanyConstants.COMP_REF_ID;
 import static com.dsc.constants.CompanyConstants.FAIL;
+import static com.dsc.constants.CompanyConstants.NO_RECORDS;
 import static com.dsc.constants.CompanyConstants.REGISTER_SUCCESS;
 import static com.dsc.constants.CompanyConstants.SUCCESS;
 import static com.dsc.constants.CompanyConstants.USER_EXISTS;
-import static com.dsc.constants.CompanyConstants.NO_RECORDS;
+import static com.dsc.constants.CompanyConstants.USER_ID;
 
 import java.util.Date;
 import java.util.List;
@@ -22,9 +24,12 @@ import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
 
 import com.dsc.dao.RegisterCompnayDao;
+import com.dsc.dao.UserDao;
 import com.dsc.handler.RegisterCompanyHandler;
 import com.dsc.mapper.CompanyMapper;
+import com.dsc.mapper.UserMapper;
 import com.dsc.model.RegisterCompany;
+import com.dsc.model.User;
 import com.dsc.response.UserResponse;
 import com.dsc.service.RegisterCompanyService;
 
@@ -33,6 +38,9 @@ public class RegisterCompanyServiceImpl implements RegisterCompanyService {
 
 	@Autowired
 	private RegisterCompnayDao regCompdao;
+
+	@Autowired
+	private UserDao userdao;
 
 	@Autowired
 	private JavaMailSender javaMailSender;
@@ -51,25 +59,37 @@ public class RegisterCompanyServiceImpl implements RegisterCompanyService {
 		logger.debug("Incoming request : " + requestBody);
 
 		RegisterCompany mappedDetails = CompanyMapper.mapAllCompanyDetails(requestBody);
+		User mapUserDetails = UserMapper.mapAllUserDetails(requestBody);
 		Date date = new Date();
-		RegisterCompany details = null;
-		details = regCompdao.findByUserEmail(requestBody.getUser_email());
-		if (details == null) {
+		User details = null;
+		RegisterCompany details1 = null;
+		String generatedCompanyRef = COMP_REF_ID;
+		String generatedUserId = USER_ID;
+		details = userdao.findByUserEmail(requestBody.getUser_email());
+		details1 = regCompdao.findByCompanyEmail(requestBody.getCompany_email());
+		if (details == null && details1 == null) {
 			if (requestBody.getUser_password() == null) {
-				mappedDetails.getUser().get(0).setPassword("Ojas1525");
+				mapUserDetails.getUserdetails().get(0).setPassword("Ojas1525");
 			}
-			String encode = passwordEncoder.encode(mappedDetails.getUser().get(0).getPassword());
-			mappedDetails.getUser().get(0).setPassword(encode);
-			String generatedCompanyRef = generatecompanyReference();
-			mappedDetails.getUser().get(0).setRole("COMPANY_ADMIN");
-			mappedDetails.getUser().get(0).setUser_status(true);
-			mappedDetails.getUser().get(0).setCreated_on(date);
+			String encode = passwordEncoder.encode(mapUserDetails.getUserdetails().get(0).getPassword());
+			mapUserDetails.getUserdetails().get(0).setPassword(encode);
+			generatedCompanyRef += generatedRefIds();
+			generatedUserId += generatedRefIds();
+			mappedDetails.getCompany().setComp_admin_id(generatedUserId);
 			mappedDetails.getCompany().setCompany_ref(generatedCompanyRef);
 			mappedDetails.getCompany().setCompany_status(false);
 			mappedDetails.getCompany().setCreated_on(date);
+			mappedDetails.getDistributor().clear();
+			mappedDetails.getUserid().get(0).setUser_id(generatedUserId);
+			mapUserDetails.getUserdetails().get(0).setUser_id(generatedUserId);
+			mapUserDetails.getUserdetails().get(0).setRole("COMPANY_ADMIN");
+			mapUserDetails.getUserdetails().get(0).setUser_status("PENDING");
+			mapUserDetails.getUserdetails().get(0).setCreated_on(date);
+
 			regCompdao.save(mappedDetails);
+			userdao.save(mapUserDetails);
 			String email = requestBody.getUser_email();
-			sendEmail(email);
+//			sendEmail(email);
 			logger.info("Company registration successfully!");
 			response.setData(mappedDetails);
 			response.setMessage(REGISTER_SUCCESS);
@@ -83,11 +103,37 @@ public class RegisterCompanyServiceImpl implements RegisterCompanyService {
 		return response;
 	}
 
-	public String generatecompanyReference() {
-		Random random = new Random();
-		String string = Long.toString(random.nextLong() & Long.MAX_VALUE, 24);
-		return string;
+	@Override
+	public UserResponse getregisterCompany() throws Exception {
+		List<RegisterCompany> findAll = regCompdao.findAll();
+		if (findAll.isEmpty()) {
+			logger.info("No records found !");
+			response.setMessage(NO_RECORDS);
+			response.setData(findAll);
+			response.setStatus(FAIL);
+			return response;
+		}
+		logger.info("Get all Company details successfully!");
+		response.setData(findAll);
+		response.setStatus(SUCCESS);
+		return response;
+	}
 
+	public String generatedRefIds() {
+		Random ran = new Random();
+		String b = "ABCDEFGHIJKLMNOPQRSTUVWXYZ";
+		String sc = "0123456789";
+		String random = "";
+		for (int j = 0; j < 4; j++) {
+			int sz = ran.nextInt(sc.length());
+			random = random + sc.charAt(sz);
+		}
+		for (int i = 0; i < 2; i++) {
+			int a = ran.nextInt(b.length());
+			random = random + b.charAt(a);
+		}
+		System.out.println("Num Gen : " + random);
+		return random;
 	}
 
 	public Boolean sendEmail(String email) throws MailException {
@@ -112,22 +158,4 @@ public class RegisterCompanyServiceImpl implements RegisterCompanyService {
 		}
 	}
 
-	@Override
-	public UserResponse getregisterCompany() throws Exception {
-		List<RegisterCompany> findAll = regCompdao.findAll();
-
-		if (findAll.isEmpty()) {
-			logger.info("No records found !");
-			response.setMessage(NO_RECORDS);
-			response.setData(findAll);
-			response.setStatus(FAIL);
-			return response;
-
-		}
-		logger.info("Get all Company details successfully!");
-		response.setData(findAll);
-		response.setStatus(SUCCESS);
-		return response;
-
-	}
 }

@@ -13,23 +13,8 @@ public class RegisterCompany {
 	@Id
 	private String id;
 	private Company company;
-	private ArrayList<User> user;
+	private ArrayList<User> userid;
 	private ArrayList<Distributor> distributor;
-
-	public RegisterCompany() {
-		super();
-	}
-
-	public RegisterCompany(String id, ArrayList<User> user, Company company) {
-		super();
-		this.id = id;
-		this.user = user;
-		this.company = company;
-	}
-
-	public void addUser(ArrayList<User> user) {
-		this.user.addAll(user);
-	}
 
 	public String getId() {
 		return id;
@@ -39,20 +24,20 @@ public class RegisterCompany {
 		this.id = id;
 	}
 
-	public ArrayList<User> getUser() {
-		return user;
-	}
-
-	public void setUser(ArrayList<User> user) {
-		this.user = user;
-	}
-
 	public Company getCompany() {
 		return company;
 	}
 
 	public void setCompany(Company company) {
 		this.company = company;
+	}
+
+	public ArrayList<User> getUserid() {
+		return userid;
+	}
+
+	public void setUserid(ArrayList<User> userid) {
+		this.userid = userid;
 	}
 
 	public ArrayList<Distributor> getDistributor() {
@@ -64,31 +49,24 @@ public class RegisterCompany {
 	}
 
 	public static class Company {
+		private String comp_admin_id;
 		private String company_name;
 		private String company_address;
 		private String company_mobile;
 		@Field("company_email")
 		private String email;
+		@Field("company_id")
 		private String company_ref;
 		private boolean company_status;
 		private Date created_on;
 		private Date updated_on;
 
-		public Company() {
-			super();
+		public String getComp_admin_id() {
+			return comp_admin_id;
 		}
 
-		public Company(String company_name, String company_address, String company_mobile, String email,
-				String company_ref, boolean company_status, Date created_on, Date updated_on) {
-			super();
-			this.company_name = company_name;
-			this.company_address = company_address;
-			this.company_mobile = company_mobile;
-			this.email = email;
-			this.company_ref = company_ref;
-			this.company_status = company_status;
-			this.created_on = created_on;
-			this.updated_on = updated_on;
+		public void setComp_admin_id(String comp_admin_id) {
+			this.comp_admin_id = comp_admin_id;
 		}
 
 		public String getCompany_name() {
@@ -158,134 +136,30 @@ public class RegisterCompany {
 	}
 
 	public static class User {
-		private String user_name;
-		@Field("user_email")
-		private String email;
-		private String user_mobile;
-		private String user_address;
-		private String user_country;
-		@Field("user_role")
-		private String role;
-		@Field("user_password")
-		private String password;
-		private boolean user_status;
-		private Date created_on;
-		private Date updated_on;
 
-		public User() {
-			super();
+		private String user_id;
+
+		public String getUser_id() {
+			return user_id;
 		}
 
-		public User(String user_name, String email, String user_mobile, String user_address, String user_country,
-				String role, String password, boolean user_status, Date created_on, Date updated_on) {
-			super();
-			this.user_name = user_name;
-			this.email = email;
-			this.user_mobile = user_mobile;
-			this.user_address = user_address;
-			this.user_country = user_country;
-			this.role = role;
-			this.password = password;
-			this.user_status = user_status;
-			this.created_on = created_on;
-			this.updated_on = updated_on;
-		}
- 
-		public String getUser_name() {
-			return user_name;
-		}
-
-		public void setUser_name(String user_name) {
-			this.user_name = user_name;
-		}
-
-		public String getEmail() {
-			return email;
-		}
-
-		public void setEmail(String email) {
-			this.email = email;
-		}
-
-		public String getUser_mobile() {
-			return user_mobile;
-		}
-
-		public void setUser_mobile(String user_mobile) {
-			this.user_mobile = user_mobile;
-		}
-
-		public String getUser_address() {
-			return user_address;
-		}
-
-		public void setUser_address(String user_address) {
-			this.user_address = user_address;
-		}
-
-		public String getUser_country() {
-			return user_country;
-		}
-
-		public void setUser_country(String user_country) {
-			this.user_country = user_country;
-		}
-
-		public String getRole() {
-			return role;
-		}
-
-		public void setRole(String role) {
-			this.role = role;
-		}
-
-		public String getPassword() {
-			return password;
-		}
-
-		public void setPassword(String password) {
-			this.password = password;
-		}
-
-		public boolean isUser_status() {
-			return user_status;
-		}
-
-		public void setUser_status(boolean user_status) {
-			this.user_status = user_status;
-		}
-
-		public Date getCreated_on() {
-			return created_on;
-		}
-
-		public void setCreated_on(Date created_on) {
-			this.created_on = created_on;
-		}
-
-		public Date getUpdated_on() {
-			return updated_on;
-		}
-
-		public void setUpdated_on(Date updated_on) {
-			this.updated_on = updated_on;
+		public void setUser_id(String user_id) {
+			this.user_id = user_id;
 		}
 
 	}
 
 	public static class Distributor {
 
+		private String dist_id;
 		private String company_ref;
-		private String distributor_name;
 
-		public Distributor() {
-			super();
+		public String getDist_id() {
+			return dist_id;
 		}
 
-		public Distributor(String company_ref, String distributor_name) {
-			super();
-			this.company_ref = company_ref;
-			this.distributor_name = distributor_name;
+		public void setDist_id(String dist_id) {
+			this.dist_id = dist_id;
 		}
 
 		public String getCompany_ref() {
@@ -294,14 +168,6 @@ public class RegisterCompany {
 
 		public void setCompany_ref(String company_ref) {
 			this.company_ref = company_ref;
-		}
-
-		public String getDistributor_name() {
-			return distributor_name;
-		}
-
-		public void setDistributor_name(String distributor_name) {
-			this.distributor_name = distributor_name;
 		}
 
 	}

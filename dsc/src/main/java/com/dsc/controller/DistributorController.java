@@ -54,6 +54,7 @@ public class DistributorController {
 					|| (requestBody.getUser_name().isEmpty() || requestBody.getUser_name() == null)
 					|| (requestBody.getUser_mobile().isEmpty() || requestBody.getUser_mobile() == null)
 					|| (requestBody.getUser_country().isEmpty() || requestBody.getUser_country() == null)
+					|| (requestBody.getUser_id().isEmpty() || requestBody.getUser_id() == null)
 					|| (requestBody.getCompany_ref().isEmpty() || requestBody.getCompany_ref() == null)) {
 				logger.error("Data must not be null");
 				errorResponse.setMessage(REQUEST_EMPTY);
@@ -71,7 +72,6 @@ public class DistributorController {
 			return new ResponseEntity<>(errorResponse, HttpStatus.CONFLICT);
 
 		}
-//		return null;
 	}
 
 }

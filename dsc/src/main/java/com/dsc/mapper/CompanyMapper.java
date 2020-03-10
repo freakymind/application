@@ -11,12 +11,12 @@ import com.dsc.model.RegisterCompany.User;
 public class CompanyMapper {
 
 	public static RegisterCompany mapAllCompanyDetails(RegisterCompanyHandler requestBody) {
-		RegisterCompany allDetails = new RegisterCompany(null, null, null);
+		RegisterCompany allDetails = new RegisterCompany();
 		Company syncCompanyDetails = syncCompanyDetails(requestBody);
-		ArrayList<User> syncUserDetails = syncUserDetails(requestBody);
+		ArrayList<User> syncUserIddata = syncUseridData(requestBody);
 		ArrayList<Distributor> syncDistributorDetails = syncDistributorDetails(requestBody);
 		allDetails.setCompany(syncCompanyDetails);
-		allDetails.setUser(syncUserDetails);
+		allDetails.setUserid(syncUserIddata);
 		allDetails.setDistributor(syncDistributorDetails);
 		return allDetails;
 
@@ -31,15 +31,10 @@ public class CompanyMapper {
 		return companyDetails;
 	}
 
-	private static ArrayList<User> syncUserDetails(RegisterCompanyHandler requestBody) {
+	private static ArrayList<User> syncUseridData(RegisterCompanyHandler requestBody) {
 		ArrayList<User> userDetails = new ArrayList<>();
 		User user = new User();
-		user.setUser_address(requestBody.getUser_address());
-		user.setUser_country(requestBody.getUser_country());
-		user.setEmail(requestBody.getUser_email());
-		user.setUser_name(requestBody.getUser_name());
-		user.setUser_mobile(requestBody.getUser_mobile());
-		user.setPassword(requestBody.getUser_password());
+		user.setUser_id(requestBody.getUser_id());
 		userDetails.add(user);
 		return userDetails;
 	}
@@ -47,9 +42,9 @@ public class CompanyMapper {
 	private static ArrayList<Distributor> syncDistributorDetails(RegisterCompanyHandler requestBody) {
 		ArrayList<Distributor> distlist = new ArrayList<>();
 		Distributor dist = new Distributor();
-		dist.setCompany_ref(requestBody.getCompany_ref());
-		dist.setDistributor_name(requestBody.getUser_name());
+//		dist.setCompany_ref(requestBody.getCompany_ref());
 		distlist.add(dist);
 		return distlist;
 	}
+
 }

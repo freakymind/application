@@ -8,6 +8,7 @@ public class RegisterCompanyHandler {
 	private String company_email;
 	private String company_ref;
 
+	private String user_id;
 	private String user_name;
 	private String user_email;
 	private String user_mobile;
@@ -16,6 +17,7 @@ public class RegisterCompanyHandler {
 	private String user_password;
 	private String user_role;
 
+	private String dist_id;
 	private String distributor_name;
 
 	public String getCompany_name() {
@@ -56,6 +58,14 @@ public class RegisterCompanyHandler {
 
 	public void setCompany_ref(String company_ref) {
 		this.company_ref = company_ref;
+	}
+
+	public String getUser_id() {
+		return user_id;
+	}
+
+	public void setUser_id(String user_id) {
+		this.user_id = user_id;
 	}
 
 	public String getUser_name() {
@@ -112,6 +122,15 @@ public class RegisterCompanyHandler {
 
 	public void setUser_role(String user_role) {
 		this.user_role = user_role;
+	}
+
+	
+	public String getDist_id() {
+		return dist_id;
+	}
+
+	public void setDist_id(String dist_id) {
+		this.dist_id = dist_id;
 	}
 
 	public String getDistributor_name() {

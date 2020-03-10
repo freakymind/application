@@ -13,6 +13,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.annotation.Secured;
 import org.springframework.web.bind.annotation.CrossOrigin;
+import org.springframework.web.bind.annotation.PatchMapping;
 import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -54,6 +55,7 @@ public class CompanyUserController {
 					|| (requestBody.getUser_name().isEmpty() || requestBody.getUser_name() == null)
 					|| (requestBody.getUser_mobile().isEmpty() || requestBody.getUser_mobile() == null)
 					|| (requestBody.getUser_country().isEmpty() || requestBody.getUser_country() == null)
+					|| (requestBody.getUser_id().isEmpty() || requestBody.getUser_id() == null)
 					|| (requestBody.getCompany_ref().isEmpty() || requestBody.getCompany_ref() == null)) {
 				logger.error("Data must not be null");
 				errorResponse.setMessage(REQUEST_EMPTY);
@@ -74,10 +76,10 @@ public class CompanyUserController {
 	}
 
 	@Secured({ "COMPANY_ADMIN" })
-//	@PatchMapping("/update_user")
-	@PutMapping("/update_user")
+	@PatchMapping("/update_user")
+//	@PutMapping("/update_user")
 	public ResponseEntity<Object> UpdateCompanyUser(@RequestBody RegisterCompanyHandler requestBody,
-			 HttpServletRequest request, HttpServletResponse response) {
+			HttpServletRequest request, HttpServletResponse response) {
 		logger.debug("Incoming request : " + requestBody);
 
 		try {

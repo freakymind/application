@@ -22,6 +22,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.dsc.dao.RegisterCompnayDao;
+import com.dsc.dao.UserDao;
 import com.dsc.handler.LoginHandler;
 import com.dsc.response.ErrorResponse;
 import com.dsc.security.auth.configs.JwtTokenProvider;
@@ -36,9 +37,9 @@ public class LoginController {
 
 	@Autowired
 	JwtTokenProvider jwtTokenProvider;
-
+	
 	@Autowired
-	private RegisterCompnayDao regDao;
+	private UserDao userDao;
 
 
 	private static final Logger logger =  LoggerFactory.getLogger(LoginController.class);
@@ -68,7 +69,7 @@ public class LoginController {
 			String email = login.getEmail();
 			authenticationManager.authenticate(new UsernamePasswordAuthenticationToken(email, login.getPassword()));
 			String token = jwtTokenProvider.createToken(email,
-					regDao.findByUserEmail(email).getUser().get(0).getRole());
+					userDao.findByUserEmail(email).getUserdetails().get(0).getRole());
 			Map<Object, Object> model = new HashMap<>();
 			model.put("Email", email);
 			model.put("Token", "Bearer " + token);

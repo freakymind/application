@@ -3,6 +3,10 @@ package com.dsc.constants;
 import java.security.SecureRandom;
 
 public class CompanyConstants {
+	
+	public static final String COMP_REF_ID = "DSC-COMP-";
+	public static final String USER_ID = "DSC-USER-";
+	public static final String DIST_ID = "DSC-DIST-";
 
 	public static final String REGISTER_SUCCESS = "Company Registration is Successful. You will receive an email once your account is verified by Admin.";
 	public static final String COMPANYUSER_SUCCESS = "Company User added successfully !";

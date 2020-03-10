@@ -9,11 +9,12 @@ import com.dsc.model.RegisterCompany;
 @Repository
 public interface RegisterCompnayDao extends MongoRepository<RegisterCompany, String> {
 
-	@Query(value = "{ 'user': { $elemMatch: { 'email' : ?0 } }}")
-	RegisterCompany findByUserEmail(String email);
+	@Query(value = "{ 'company': { $elemMatch: { 'email' : ?0 } }}")
+	RegisterCompany findByCompanyEmail(String email);
 
 	
-	@Query(value = "{ 'company.company_ref' : ?0 }")
+	@Query(value = "{ 'company.company_id' : ?0 }")
+//	@Query(value = "{ 'company': { $elemMatch: { 'company_ref' : ?0 } }}")
 	RegisterCompany findByCompanycompany_ref(String company_ref);
 	
 //	@Query(value = "{'id' : ?0 }", fields = "{ 'user' : 1 }")

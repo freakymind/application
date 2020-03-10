@@ -16,24 +16,23 @@ import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.stereotype.Service;
 
-import com.dsc.dao.RegisterCompnayDao;
-import com.dsc.model.RegisterCompany;
+import com.dsc.dao.UserDao;
 
 @Service
 public class CustomUserDetailsService implements UserDetailsService {
 
 	@Autowired
-	private RegisterCompnayDao regDao;
+	private UserDao userDao;
 	
 	private static final Logger logger =  LoggerFactory.getLogger(CustomUserDetailsService.class);
 
 	@Override
 	public UserDetails loadUserByUsername(String email) throws UsernameNotFoundException {
 		logger.debug("Incoming request user email: " + email);
-		RegisterCompany userDetails = regDao.findByUserEmail(email);
+		 com.dsc.model.User userDetails = userDao.findByUserEmail(email);
 
 		if (userDetails != null) {
-			List<GrantedAuthority> authorities = getUserAuthority(userDetails.getUser().get(0).getRole());
+			List<GrantedAuthority> authorities = getUserAuthority(userDetails.getUserdetails().get(0).getRole());
 			System.out.println("Authorities " + authorities);
 			return getUserForDetails(userDetails, authorities);
 
@@ -51,8 +50,8 @@ public class CustomUserDetailsService implements UserDetailsService {
 		return grantedAuthorities;
 	}
 
-	private UserDetails getUserForDetails(RegisterCompany userDetails, List<GrantedAuthority> authorities) {
-		User user = new User(userDetails.getUser().get(0).getEmail(), userDetails.getUser().get(0).getPassword(),
+	private UserDetails getUserForDetails(com.dsc.model.User userDetails, List<GrantedAuthority> authorities) {
+		User user = new User(userDetails.getUserdetails().get(0).getEmail(), userDetails.getUserdetails().get(0).getPassword(),
 				authorities);
 		return user;
 	}
