@@ -2,10 +2,13 @@ package com.dsc.serviceimpl;
 
 import static com.dsc.constants.CompanyConstants.COMPANYUSER_SUCCESS;
 import static com.dsc.constants.CompanyConstants.COMPANYUSER_UPDATED_SUCCESS;
+import static com.dsc.constants.CompanyConstants.USER_DELETED_SUCCESS;
 import static com.dsc.constants.CompanyConstants.FAIL;
 import static com.dsc.constants.CompanyConstants.SUCCESS;
 import static com.dsc.constants.CompanyConstants.USER_EXISTS;
 import static com.dsc.constants.CompanyConstants.USER_ID;
+import static com.dsc.constants.CompanyConstants.USER_UPDATE_FAILED;
+import static com.dsc.constants.CompanyConstants.USER_DELETE_FAILED;
 
 import java.util.ArrayList;
 import java.util.Date;
@@ -24,6 +27,7 @@ import com.dsc.mapper.CompanyMapper;
 import com.dsc.mapper.UserMapper;
 import com.dsc.model.RegisterCompany;
 import com.dsc.model.RegisterCompany.Company;
+import com.dsc.model.RegisterCompany.Distributor;
 import com.dsc.model.RegisterCompany.User;
 import com.dsc.model.User.UserDetails;
 import com.dsc.response.UserResponse;
@@ -162,7 +166,61 @@ public class CompanyUserServiceImpl implements CompanyUserService {
 		}
 		logger.error("Failed to process update request");
 		response.setStatus(FAIL);
-		response.setMessage(USER_EXISTS);
+		response.setMessage(USER_UPDATE_FAILED);
 		return response;
+	}
+
+	@Override
+	public UserResponse userStatusUpdate(RegisterCompanyHandler requestBody) throws Exception {
+		logger.debug("Incoming delete request : " + requestBody);
+		com.dsc.model.User mapAllUserDetails = UserMapper.mapAllUserDetails(requestBody);
+		RegisterCompany mapAllCompanyDetails = CompanyMapper.mapAllCompanyDetails(requestBody);
+		Date date = new Date();
+		com.dsc.model.User findByUserEmailObj = userdao.findByUserEmail(requestBody.getUser_email());
+		String role2 = findByUserEmailObj.getUserdetails().get(0).getRole();
+		ArrayList<UserDetails> userarrayList = findByUserEmailObj.getUserdetails();
+//		com.dsc.model.User findByUserIdslist = userdao.findByUseruser_id(requestBody.getUser_id());
+//		ArrayList<UserDetails> userIdsArrList = findByUserIdslist.getUserdetails();
+		RegisterCompany adminIds = regCompdao.findByCompanycomp_admin_id(requestBody.getUser_id());
+		ArrayList<User> userIdsList = adminIds.getUserid();
+		ArrayList<Distributor> distIdsList = adminIds.getDistributor();
+
+		int i = 0;
+		for (UserDetails userdata : userarrayList) {
+			String email1 = userdata.getEmail();
+			String role = userdata.getRole();
+			if (email1.equals(requestBody.getUser_email()) && role2.equals("COMPANY_ADMIN")) {
+				userdata.setUser_status(requestBody.getUser_status());
+				userdata.setUpdated_on(date);
+				userarrayList.set(i, userdata);
+				String id = findByUserEmailObj.getId();
+				logger.info("Id is :" + id);
+				mapAllUserDetails.setId(id);
+				mapAllUserDetails.setUserdetails(userarrayList);
+				userdao.save(mapAllUserDetails);
+				logger.info("User details deleted successfully!");
+				response.setData(userdata);
+				response.setMessage(USER_DELETED_SUCCESS);
+				response.setStatus(SUCCESS);
+				return response;
+			}
+			i++;
+
+			if (role.equals("COMPANY_USER")) {
+				for (User userIdlist : userIdsList) {
+
+				}
+
+			} else if (role.equals("DISTRIBUTOR")) {
+				for (Distributor distIdlist : distIdsList) {
+
+				}
+			}
+		}
+		logger.error("Failed to process delete request");
+		response.setStatus(FAIL);
+		response.setMessage(USER_DELETE_FAILED);
+		return response;
+
 	}
 }

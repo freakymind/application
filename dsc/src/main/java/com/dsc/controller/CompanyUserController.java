@@ -114,4 +114,39 @@ public class CompanyUserController {
 		}
 	}
 
+	@Secured({ "COMPANY_ADMIN" })
+	@PatchMapping("/delete_user")
+	public ResponseEntity<Object> userStatusUpdate(@RequestBody RegisterCompanyHandler requestBody,
+			HttpServletRequest request, HttpServletResponse response) {
+		logger.debug("Incoming request : " + requestBody);
+
+		try {
+
+			if (requestBody == null) {
+				logger.error("Invalid request");
+				errorResponse.setStatus(FAIL);
+				errorResponse.setMessage("Invalid Request");
+				return new ResponseEntity<>(errorResponse, HttpStatus.UNPROCESSABLE_ENTITY);
+			}
+
+			if ((requestBody.getUser_email().isEmpty() || requestBody.getUser_email() == null)
+					|| (requestBody.getUser_id().isEmpty() || requestBody.getUser_id() == null)
+					|| (requestBody.getUser_status().isEmpty() || requestBody.getUser_status() == null)) {
+				logger.error("Data must not be null");
+				errorResponse.setMessage(REQUEST_EMPTY);
+				errorResponse.setStatus(FAIL);
+				errorResponse.setData(null);
+				return new ResponseEntity<>(errorResponse, HttpStatus.UNPROCESSABLE_ENTITY);
+			}
+			UserResponse companyUserResp = compuserService.userStatusUpdate(requestBody);
+			return new ResponseEntity<>(companyUserResp, HttpStatus.OK);
+
+		} catch (Exception e) {
+			logger.error("Exception caught : " + e.getMessage());
+			errorResponse.setStatus(FAIL);
+			errorResponse.setMessage("Exception caught User delete controller!");
+			return new ResponseEntity<>(errorResponse, HttpStatus.CONFLICT);
+
+		}
+	}
 }

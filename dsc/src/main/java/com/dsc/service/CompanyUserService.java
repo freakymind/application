@@ -8,5 +8,7 @@ public interface CompanyUserService {
 	UserResponse registerCompanyUser(RegisterCompanyHandler requestBody) throws Exception;
 
 	UserResponse updateCompanyUser(RegisterCompanyHandler requestBody) throws Exception;
+	
+	UserResponse userStatusUpdate(RegisterCompanyHandler requestBody) throws Exception;
 
 }

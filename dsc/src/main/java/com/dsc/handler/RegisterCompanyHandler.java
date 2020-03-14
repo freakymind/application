@@ -16,6 +16,7 @@ public class RegisterCompanyHandler {
 	private String user_country;
 	private String user_password;
 	private String user_role;
+	private String user_status;
 
 	private String dist_id;
 	private String distributor_name;
@@ -125,6 +126,14 @@ public class RegisterCompanyHandler {
 	}
 
 	
+	public String getUser_status() {
+		return user_status;
+	}
+
+	public void setUser_status(String user_status) {
+		this.user_status = user_status;
+	}
+
 	public String getDist_id() {
 		return dist_id;
 	}

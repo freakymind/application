@@ -14,8 +14,11 @@ public interface RegisterCompnayDao extends MongoRepository<RegisterCompany, Str
 
 	
 	@Query(value = "{ 'company.company_id' : ?0 }")
-//	@Query(value = "{ 'company': { $elemMatch: { 'company_ref' : ?0 } }}")
 	RegisterCompany findByCompanycompany_ref(String company_ref);
+	
+	
+	@Query(value = "{ 'company.comp_admin_id' : ?0 }")
+	RegisterCompany findByCompanycomp_admin_id(String comp_admin_id);
 	
 //	@Query(value = "{'id' : ?0 }", fields = "{ 'user' : 1 }")
 //	@Query(value = "{'id':?0},{$push:{'user':?1}}}")

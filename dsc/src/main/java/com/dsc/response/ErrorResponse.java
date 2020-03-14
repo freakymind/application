@@ -3,7 +3,7 @@ package com.dsc.response;
 public class ErrorResponse {
 
 	private String message;
-	private Integer status;
+	private String status;
 	private Object data;
 
 	public String getMessage() {
@@ -14,11 +14,11 @@ public class ErrorResponse {
 		this.message = message;
 	}
 
-	public Integer getStatus() {
+	public String getStatus() {
 		return status;
 	}
 
-	public void setStatus(Integer status) {
+	public void setStatus(String status) {
 		this.status = status;
 	}
 
