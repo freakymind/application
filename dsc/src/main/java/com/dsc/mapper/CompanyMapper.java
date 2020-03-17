@@ -6,6 +6,7 @@ import com.dsc.handler.RegisterCompanyHandler;
 import com.dsc.model.RegisterCompany;
 import com.dsc.model.RegisterCompany.Company;
 import com.dsc.model.RegisterCompany.Distributor;
+import com.dsc.model.RegisterCompany.Product;
 import com.dsc.model.RegisterCompany.User;
 
 public class CompanyMapper {
@@ -15,9 +16,11 @@ public class CompanyMapper {
 		Company syncCompanyDetails = syncCompanyDetails(requestBody);
 		ArrayList<User> syncUserIddata = syncUseridData(requestBody);
 		ArrayList<Distributor> syncDistributorDetails = syncDistributorDetails(requestBody);
+		ArrayList<Product> syncProductDetails = syncProductDetails(requestBody);
 		allDetails.setCompany(syncCompanyDetails);
 		allDetails.setUserid(syncUserIddata);
 		allDetails.setDistributor(syncDistributorDetails);
+		allDetails.setProduct(syncProductDetails);
 		return allDetails;
 
 	}
@@ -45,6 +48,24 @@ public class CompanyMapper {
 //		dist.setCompany_ref(requestBody.getCompany_ref());
 		distlist.add(dist);
 		return distlist;
+	}
+	
+	private static ArrayList<Product>syncProductDetails(RegisterCompanyHandler requestBody){
+		ArrayList<Product> productlist = new ArrayList<>();
+		Product product=new Product();
+		product.setCompany_ref(requestBody.getCompany_ref());
+		 product.setProduct_id(requestBody.getProduct_id());
+		  product.setProduct_name(requestBody.getProduct_name());
+		  product.setProduct_brand(requestBody.getProduct_brand());
+		  product.setProduct_dimensions(requestBody.getProduct_dimensions());
+		  product.setProduct_model(requestBody.getProduct_model());
+		  product.setProduct_weight(requestBody.getProduct_weight());
+		  product.setBatch(requestBody.getBatch());
+		  product.setBatch_size(requestBody.getBatch_size());
+		  product.setCountry_code(requestBody.getCountry_code());
+		productlist.add(product);
+		return productlist;
+		
 	}
 
 }

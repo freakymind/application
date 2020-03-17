@@ -80,6 +80,7 @@ public class RegisterCompanyServiceImpl implements RegisterCompanyService {
 			mappedDetails.getCompany().setCompany_status(false);
 			mappedDetails.getCompany().setCreated_on(date);
 			mappedDetails.getDistributor().clear();
+			mappedDetails.getProduct().clear();
 			mappedDetails.getUserid().get(0).setUser_id(generatedUserId);
 			mapUserDetails.getUserdetails().get(0).setUser_id(generatedUserId);
 			mapUserDetails.getUserdetails().get(0).setRole("COMPANY_ADMIN");

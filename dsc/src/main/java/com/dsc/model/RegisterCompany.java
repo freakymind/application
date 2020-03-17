@@ -14,6 +14,7 @@ public class RegisterCompany {
 	private String id;
 	private Company company;
 	private ArrayList<User> userid;
+	private ArrayList<Product> product;
 	private ArrayList<Distributor> distributor;
 
 	public String getId() {
@@ -46,6 +47,14 @@ public class RegisterCompany {
 
 	public void setDistributor(ArrayList<Distributor> distributor) {
 		this.distributor = distributor;
+	}
+	
+	public ArrayList<Product> getProduct() {
+		return product;
+	}
+
+	public void setProduct(ArrayList<Product> product) {
+		this.product = product;
 	}
 
 	public static class Company {
@@ -170,6 +179,144 @@ public class RegisterCompany {
 			this.company_ref = company_ref;
 		}
 
+	}
+
+ public static class Product {
+		
+		private String product_id;
+		private String product_name;
+		private String product_brand;
+		private String product_dimensions;
+		private String country_code;
+		private String product_model;
+		private Double product_weight;
+		private String batch;
+		private Double batch_size;
+		private String company_ref;
+		private Date created_on;
+		private Date updated_on;
+
+		public Product(String product_id, String product_name, String product_brand, String product_dimensions,
+				String country_code, String product_model, Double product_weight,String batch, Double batch_size, String company_ref,
+				Date created_on, Date updated_on) {
+			super();
+			this.product_id = product_id;
+			this.product_name = product_name;
+			this.product_brand = product_brand;
+			this.product_dimensions = product_dimensions;
+			this.country_code = country_code;
+			this.product_model = product_model;
+			this.product_weight = product_weight;
+			this.batch=batch;
+			this.batch_size = batch_size;
+			this.company_ref = company_ref;
+			this.created_on = created_on;
+			this.updated_on = updated_on;
+		}
+
+		public Product() {
+			super();
+		}
+
+		public String getProduct_id() {
+			return product_id;
+		}
+
+		public void setProduct_id(String product_id) {
+			this.product_id = product_id;
+		}
+
+		public String getProduct_name() {
+			return product_name;
+		}
+
+		public void setProduct_name(String product_name) {
+			this.product_name = product_name;
+		}
+
+		public String getProduct_brand() {
+			return product_brand;
+		}
+
+		public void setProduct_brand(String product_brand) {
+			this.product_brand = product_brand;
+		}
+
+		public String getProduct_dimensions() {
+			return product_dimensions;
+		}
+
+		public void setProduct_dimensions(String product_dimensions) {
+			this.product_dimensions = product_dimensions;
+		}
+
+		public String getCountry_code() {
+			return country_code;
+		}
+
+		public void setCountry_code(String country_code) {
+			this.country_code = country_code;
+		}
+
+		public String getProduct_model() {
+			return product_model;
+		}
+
+		public void setProduct_model(String product_model) {
+			this.product_model = product_model;
+		}
+
+		public Double getProduct_weight() {
+			return product_weight;
+		}
+
+		public void setProduct_weight(Double product_weight) {
+			this.product_weight = product_weight;
+		}
+		
+		
+		
+
+		public Double getBatch_size() {
+			return batch_size;
+		}
+
+		public void setBatch_size(Double batch_size) {
+			this.batch_size = batch_size;
+		}
+
+		public String getCompany_ref() {
+			return company_ref;
+		}
+
+		public void setCompany_ref(String company_ref) {
+			this.company_ref = company_ref;
+		}
+
+		public Date getCreated_on() {
+			return created_on;
+		}
+
+		public void setCreated_on(Date created_on) {
+			this.created_on = created_on;
+		}
+
+		public String getBatch() {
+			return batch;
+		}
+
+		public void setBatch(String batch) {
+			this.batch = batch;
+		}
+
+		public Date getUpdated_on() {
+			return updated_on;
+		}
+
+		public void setUpdated_on(Date updated_on) {
+			this.updated_on = updated_on;
+		}
+	
 	}
 
 }

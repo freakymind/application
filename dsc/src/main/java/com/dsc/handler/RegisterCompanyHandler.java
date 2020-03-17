@@ -20,6 +20,16 @@ public class RegisterCompanyHandler {
 
 	private String dist_id;
 	private String distributor_name;
+	
+	private String product_id;
+	private String product_name;
+	private String product_brand;
+	private String product_dimensions;
+	private String country_code;
+	private String product_model;
+	private Double product_weight;
+	private String batch;
+	private Double batch_size;
 
 	public String getCompany_name() {
 		return company_name;
@@ -148,6 +158,77 @@ public class RegisterCompanyHandler {
 
 	public void setDistributor_name(String distributor_name) {
 		this.distributor_name = distributor_name;
+	}
+	
+	public String getProduct_id() {
+		return product_id;
+	}
+
+	public void setProduct_id(String product_id) {
+		this.product_id = product_id;
+	}
+
+	public String getProduct_name() {
+		return product_name;
+	}
+
+	public void setProduct_name(String product_name) {
+		this.product_name = product_name;
+	}
+
+	public String getProduct_brand() {
+		return product_brand;
+	}
+
+	public void setProduct_brand(String product_brand) {
+		this.product_brand = product_brand;
+	}
+
+	public String getProduct_dimensions() {
+		return product_dimensions;
+	}
+
+	public void setProduct_dimensions(String product_dimensions) {
+		this.product_dimensions = product_dimensions;
+	}
+
+	public String getCountry_code() {
+		return country_code;
+	}
+
+	public void setCountry_code(String country_code) {
+		this.country_code = country_code;
+	}
+
+	public String getProduct_model() {
+		return product_model;
+	}
+
+	public void setProduct_model(String product_model) {
+		this.product_model = product_model;
+	}
+
+	public Double getProduct_weight() {
+		return product_weight;
+	}
+
+	public void setProduct_weight(Double product_weight) {
+		this.product_weight = product_weight;
+	}
+	public String getBatch() {
+		return batch;
+	}
+
+	public void setBatch(String batch) {
+		this.batch = batch;
+	}
+	
+	public Double getBatch_size() {
+		return batch_size;
+	}
+
+	public void setBatch_size(Double batch_size) {
+		this.batch_size = batch_size;
 	}
 
 }

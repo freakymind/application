@@ -23,5 +23,8 @@ public interface RegisterCompnayDao extends MongoRepository<RegisterCompany, Str
 //	@Query(value = "{'id' : ?0 }", fields = "{ 'user' : 1 }")
 //	@Query(value = "{'id':?0},{$push:{'user':?1}}}")
 //	RegisterCompany findOneIncludeOnlyUser(String id, RegisterCompany registerCompany);
+	
+	@Query(value = "{ 'product.product_id' : ?0 }")
+	RegisterCompany findByProductId(String product_id);
 
 }

@@ -24,6 +24,9 @@ import org.springframework.web.bind.annotation.RestController;
 import com.dsc.dao.RegisterCompnayDao;
 import com.dsc.dao.UserDao;
 import com.dsc.handler.LoginHandler;
+import com.dsc.model.RegisterCompany;
+import com.dsc.model.RegisterCompany.Company;
+import com.dsc.model.User;
 import com.dsc.response.ErrorResponse;
 import com.dsc.security.auth.configs.JwtTokenProvider;
 
@@ -40,7 +43,8 @@ public class LoginController {
 	
 	@Autowired
 	private UserDao userDao;
-
+	@Autowired
+	private RegisterCompnayDao regComDao;
 
 	private static final Logger logger =  LoggerFactory.getLogger(LoginController.class);
 	ErrorResponse errorResponse = new ErrorResponse();
@@ -70,9 +74,14 @@ public class LoginController {
 			authenticationManager.authenticate(new UsernamePasswordAuthenticationToken(email, login.getPassword()));
 			String token = jwtTokenProvider.createToken(email,
 					userDao.findByUserEmail(email).getUserdetails().get(0).getRole());
+			User findByUserEmail = userDao.findByUserEmail(email);
+			RegisterCompany adminid = regComDao
+					.findByCompanycomp_admin_id(findByUserEmail.getUserdetails().get(0).getUser_id());
+			Company company = adminid.getCompany();
 			Map<Object, Object> model = new HashMap<>();
 			model.put("Email", email);
 			model.put("Token", "Bearer " + token);
+			model.put("Data", company);
 			return new ResponseEntity<>(model, HttpStatus.OK);
 		} catch (AuthenticationException e) {
 			logger.error("Invalid email/password");

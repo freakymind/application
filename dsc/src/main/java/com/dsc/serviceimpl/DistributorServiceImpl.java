@@ -24,6 +24,7 @@ import com.dsc.mapper.UserMapper;
 import com.dsc.model.RegisterCompany;
 import com.dsc.model.RegisterCompany.Company;
 import com.dsc.model.RegisterCompany.Distributor;
+import com.dsc.model.RegisterCompany.Product;
 import com.dsc.model.RegisterCompany.User;
 import com.dsc.model.User.UserDetails;
 import com.dsc.response.UserResponse;
@@ -68,6 +69,7 @@ public class DistributorServiceImpl implements DistributorService {
 
 					Company company = compRef.getCompany();
 					ArrayList<User> compUserIdList = compRef.getUserid();
+					ArrayList<Product> productList = compRef.getProduct();
 					ArrayList<Distributor> distIdList = compRef.getDistributor();
 					ArrayList<UserDetails> userdetailsList = users.getUserdetails();
 
@@ -100,6 +102,7 @@ public class DistributorServiceImpl implements DistributorService {
 						allCompanyDetails.setCompany(company);
 						allCompanyDetails.setUserid(compUserIdList);
 						allCompanyDetails.setDistributor(distIdList);
+						allCompanyDetails.setProduct(productList);
 
 						String userObjId = findObjId.getId();
 						logger.info("UserObjId is :" + userObjId);
