@@ -137,7 +137,6 @@ public class CompanyUserServiceImpl implements CompanyUserService {
 			String email1 = userdata.getEmail();
 			String role = userdata.getRole();
 			Date created_on = userdata.getCreated_on();
-
 			if (email1.equals(requestBody.getUser_email())) {
 				String encode = passwordEncoder.encode(userdata.getPassword());
 				userdata.setPassword(encode);
@@ -179,14 +178,12 @@ public class CompanyUserServiceImpl implements CompanyUserService {
 		com.dsc.model.User findByUserEmailObj = userdao.findByUserEmail(requestBody.getUser_email());
 		String role2 = findByUserEmailObj.getUserdetails().get(0).getRole();
 		ArrayList<UserDetails> userarrayList = findByUserEmailObj.getUserdetails();
-//		com.dsc.model.User findByUserIdslist = userdao.findByUseruser_id(requestBody.getUser_id());
-//		ArrayList<UserDetails> userIdsArrList = findByUserIdslist.getUserdetails();
 		RegisterCompany adminIds = regCompdao.findByCompanycomp_admin_id(requestBody.getUser_id());
 		ArrayList<User> userIdsList = adminIds.getUserid();
 		ArrayList<Distributor> distIdsList = adminIds.getDistributor();
-
 		int i = 0;
 		for (UserDetails userdata : userarrayList) {
+			String userId2 = userdata.getUser_id();
 			String email1 = userdata.getEmail();
 			String role = userdata.getRole();
 			if (email1.equals(requestBody.getUser_email()) && role2.equals("COMPANY_ADMIN")) {
@@ -198,6 +195,29 @@ public class CompanyUserServiceImpl implements CompanyUserService {
 				mapAllUserDetails.setId(id);
 				mapAllUserDetails.setUserdetails(userarrayList);
 				userdao.save(mapAllUserDetails);
+				if (role.equals("COMPANY_USER")) {
+					int j = 0;
+					for (User userIdlist : userIdsList) {
+						String userid3 = userIdlist.getUser_id();
+						if (userid3.equals(userId2)) {
+							adminIds.getUserid().remove(j);
+							regCompdao.save(adminIds);
+							break;
+						}
+						j++;
+					}
+				} else if (role.equals("DISTRIBUTOR")) {
+					int k = 0;
+					for (Distributor distIdlist : distIdsList) {
+						String distid3 = distIdlist.getDist_id();
+						if (distid3.equals(userId2)) {
+							adminIds.getDistributor().remove(k);
+							regCompdao.save(adminIds);
+							break;
+						}
+						k++;
+					}
+				}
 				logger.info("User details deleted successfully!");
 				response.setData(userdata);
 				response.setMessage(USER_DELETED_SUCCESS);
@@ -205,18 +225,8 @@ public class CompanyUserServiceImpl implements CompanyUserService {
 				return response;
 			}
 			i++;
-
-			if (role.equals("COMPANY_USER")) {
-				for (User userIdlist : userIdsList) {
-
-				}
-
-			} else if (role.equals("DISTRIBUTOR")) {
-				for (Distributor distIdlist : distIdsList) {
-
-				}
-			}
 		}
+
 		logger.error("Failed to process delete request");
 		response.setStatus(FAIL);
 		response.setMessage(USER_DELETE_FAILED);
